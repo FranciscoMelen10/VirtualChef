@@ -18,11 +18,14 @@ CREATE TABLE Usuario (
 -- Tabla Receta
 CREATE TABLE Receta (
     idReceta INT PRIMARY KEY IDENTITY,
+    idUsuario INT, -- Agregar la nueva columna idUsuario
     nombre VARCHAR(100),
     descripcion TEXT,
     tiempo INT,
-    imagen VARBINARY(MAX) -- Cambiado a VARBINARY(MAX) para almacenar imágenes
+    imagen VARBINARY(MAX), -- Cambiado a VARBINARY(MAX) para almacenar imágenes
+    FOREIGN KEY (idUsuario) REFERENCES Usuario(idUsuario) -- Agregar la restricción de clave externa
 );
+
 
 -- Tabla Pasos
 CREATE TABLE Pasos (
