@@ -1,0 +1,58 @@
+-- Tabla Rol
+CREATE TABLE Rol (
+    idRol INT PRIMARY KEY IDENTITY,
+    nombre VARCHAR(50)
+);
+
+-- Tabla Usuario
+CREATE TABLE Usuario (
+    idUsuario INT PRIMARY KEY IDENTITY,
+    idRol INT,
+    nombre VARCHAR(50),
+    apellido VARCHAR(50),
+    username VARCHAR(50),
+    clave VARCHAR(50),
+    FOREIGN KEY (idRol) REFERENCES Rol(idRol)
+);
+
+-- Tabla Receta
+CREATE TABLE Receta (
+    idReceta INT PRIMARY KEY IDENTITY,
+    nombre VARCHAR(100),
+    descripcion TEXT,
+    tiempo INT,
+    imagen VARBINARY(MAX) -- Cambiado a VARBINARY(MAX) para almacenar imágenes
+);
+
+-- Tabla Pasos
+CREATE TABLE Pasos (
+    idPasos INT PRIMARY KEY IDENTITY,
+    idReceta INT,
+    nombre VARCHAR(100),
+    FOREIGN KEY (idReceta) REFERENCES Receta(idReceta) ON DELETE CASCADE
+);
+
+-- Tabla Ingredientes
+CREATE TABLE Ingredientes (
+    idIngredientes INT PRIMARY KEY IDENTITY,
+    idReceta INT,
+    nombre VARCHAR(100),
+    FOREIGN KEY (idReceta) REFERENCES Receta(idReceta) ON DELETE CASCADE
+);
+
+-- Tabla Horario
+CREATE TABLE Horario (
+    idHorario INT PRIMARY KEY IDENTITY,
+    idReceta INT,
+    nombre VARCHAR(100),
+    FOREIGN KEY (idReceta) REFERENCES Receta(idReceta) ON DELETE CASCADE
+);
+
+-- Tabla Favoritos
+CREATE TABLE Favoritos (
+    idFavoritos INT PRIMARY KEY IDENTITY,
+    idReceta INT,
+    idUsuario INT,
+    FOREIGN KEY (idReceta) REFERENCES Receta(idReceta) ON DELETE CASCADE,
+    FOREIGN KEY (idUsuario) REFERENCES Usuario(idUsuario)
+);
