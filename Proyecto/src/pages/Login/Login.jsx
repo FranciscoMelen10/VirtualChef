@@ -1,20 +1,12 @@
-import {
-  StyleSheet,
-  View,
-  Image,
-  TouchableOpacity,
-  Text,
-} from "react-native";
+import { StyleSheet, View, Image, TouchableOpacity, Text } from "react-native";
 import ButtonCom from "../../components/Buttons/BtnFuntion";
 import InputCom from "../../components/Inputs/Input";
+import { Iconos } from "../../components/Icon/constante-svg";
 
 export default function Login({ navigation }) {
   return (
     <View style={styles.contenedor_principal}>
-      <Image
-        style={styles.img}
-        source={require("../../../assets/Logo.png")}
-      ></Image>
+      {Iconos.LogoXL}
       <View style={styles.contenedor}>
         <InputCom name={"Nombre de usuario"}></InputCom>
         <InputCom name={"Contraseña"}></InputCom>
@@ -38,11 +30,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
     flexDirection: "column",
     justifyContent: "center",
-  },
-  img: {
-    width: 200,
-    height: 200,
-    marginBottom: 20,
   },
   contenedor: {
     alignItems: "center",

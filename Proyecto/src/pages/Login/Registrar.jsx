@@ -1,16 +1,16 @@
-import { StyleSheet, View, Image, ScrollView } from "react-native";
+import { StyleSheet, View, Dimensions, ScrollView } from "react-native";
 import ButtonCom from "../../components/Buttons/BtnFuntion";
 import InputCom from "../../components/Inputs/Input";
 import constantes from "expo-constants";
+import { Iconos } from "../../components/Icon/constante-svg";
+
+const HEIGHT_WINDOW = Dimensions.get("window").height;
 
 export default function Registrar({ navigation }) {
   return (
     <ScrollView style={styles.scrollCont}>
       <View style={styles.contenedor_principal}>
-        <Image
-          style={styles.img}
-          source={require("../../../assets/Logo.png")}
-        ></Image>
+        {Iconos.LogoXL}
         <View style={styles.contenedor}>
           <InputCom name={"Correo electronico"}></InputCom>
           <InputCom name={"Nombre"}></InputCom>
@@ -32,7 +32,8 @@ const styles = StyleSheet.create({
   contenedor_principal: {
     alignItems: "center",
     flexDirection: "column",
-    justifyContent: "space-between",
+    justifyContent: "space-evenly",
+    height: HEIGHT_WINDOW,
   },
   scrollCont: {
     paddingTop: constantes.statusBarHeight,

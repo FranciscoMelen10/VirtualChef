@@ -1,7 +1,6 @@
 import React from "react";
 import { View, Text, Image, StyleSheet } from "react-native";
-import Reloj from "../../../assets/Reloj.png";
-import Corazon from "../../../assets/Corazon.png";
+import { Iconos } from "../Icon/constante-svg";
 
 export default function CardComidas({ name, time, imagen }) {
   return (
@@ -11,11 +10,11 @@ export default function CardComidas({ name, time, imagen }) {
         <View style={styles.textContainer}>
           <Text style={styles.title}>{name}</Text>
           <View style={styles.timeContainer}>
-            <Image source={Reloj} style={styles.clockIcon} />
+            {Iconos.Reloj}
             <Text>{time + " minutos"}</Text>
           </View>
         </View>
-        <Image source={Corazon} style={styles.corazon}></Image>
+        {Iconos.Corazon}
       </View>
     </View>
   );
@@ -59,8 +58,5 @@ const styles = StyleSheet.create({
     width: 20,
     height: 20,
     marginRight: 5,
-  },
-  corazon: {
-    width: 18,
   },
 });

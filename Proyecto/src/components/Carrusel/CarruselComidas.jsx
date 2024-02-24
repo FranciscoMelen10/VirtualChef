@@ -103,7 +103,7 @@ const styles = StyleSheet.create({
   },
   container: {
     margin: 20,
-    paddingVertical: 10,
-    gap: 20,
+    paddingVertical: 5,
+    gap: 10,
   },
 });
