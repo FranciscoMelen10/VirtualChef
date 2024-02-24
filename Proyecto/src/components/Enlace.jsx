@@ -1,5 +1,5 @@
 import React from 'react';
-import { TouchableOpacity, Text, Linking, StyleSheet } from 'react-native';
+import { TouchableOpacity, Text, Alert, StyleSheet } from 'react-native';
 
 export function Enlace ({titulo, url}) {
   const handlePress = () => {

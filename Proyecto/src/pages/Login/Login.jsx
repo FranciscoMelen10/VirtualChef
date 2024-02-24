@@ -1,14 +1,14 @@
 import { StyleSheet, View, Image } from 'react-native';
-import ButtonCom from '../components/Button';
-import InputCom from '../components/Input';
-import Enlace from '../components/Enlace';
+import ButtonCom from '../../components/Button';
+import InputCom from '../../components/Input';
+import Enlace from '../../components/Enlace';
 
 export default function Login() {
     return (
       <View style={styles.contenedor_principal}>
         <Image
           style={styles.img}
-          source={require("../../assets/Logo.png")}>
+          source={require("../../../assets/Logo.png")}>
         </Image>
         <View style={styles.contenedor}>
           <InputCom name={"Nombre de usuario"}></InputCom>
