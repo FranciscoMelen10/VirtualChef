@@ -1,9 +1,9 @@
 import { StyleSheet, View, Image, ScrollView } from "react-native";
-import ButtonCom from "../../components/Button";
-import InputCom from "../../components/Input";
+import ButtonCom from "../../components/Buttons/Button";
+import InputCom from "../../components/Inputs/Input";
 import constantes from "expo-constants";
 
-export default function Registrar() {
+export default function Registrar({ navigation }) {
   return (
     <ScrollView style={styles.scrollCont}>
       <View style={styles.contenedor_principal}>
@@ -19,7 +19,10 @@ export default function Registrar() {
           <InputCom name={"Contraseña"}></InputCom>
           <InputCom name={"Confirmar contraseña"}></InputCom>
         </View>
-        <ButtonCom name={"Registrar"}></ButtonCom>
+        <ButtonCom
+          name={"Registrar"}
+          funtionClick={() => navigation.navigate("Login")}
+        ></ButtonCom>
       </View>
     </ScrollView>
   );
