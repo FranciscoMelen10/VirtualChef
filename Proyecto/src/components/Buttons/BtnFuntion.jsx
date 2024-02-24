@@ -1,7 +1,7 @@
 import React from "react";
-import { StyleSheet, Text, View, TouchableOpacity, Button } from "react-native";
+import { StyleSheet, Text, TouchableOpacity } from "react-native";
 
-const ButtonDesing = ({ name, funtionClick }) => {
+const BtnFuntion = ({ name, funtionClick }) => {
   return (
     <TouchableOpacity onPress={funtionClick} style={styles.buttonContainer}>
       <Text style={styles.buttonText}>{name}</Text>
@@ -25,4 +25,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default ButtonDesing;
+export default BtnFuntion;

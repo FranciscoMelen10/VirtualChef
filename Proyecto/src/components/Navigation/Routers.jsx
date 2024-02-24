@@ -1,6 +1,4 @@
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import Login from "../../pages/Login/Login";
-import Registrar from "../../pages/Login/Registrar";
 import Principal from "../../pages/Home/Principal";
 import { NavigationContainer } from "@react-navigation/native";
 

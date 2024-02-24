@@ -3,10 +3,9 @@ import {
   View,
   Image,
   TouchableOpacity,
-  Alert,
   Text,
 } from "react-native";
-import ButtonCom from "../../components/Buttons/Button";
+import ButtonCom from "../../components/Buttons/BtnFuntion";
 import InputCom from "../../components/Inputs/Input";
 
 export default function Login({ navigation }) {

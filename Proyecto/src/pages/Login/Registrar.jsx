@@ -1,5 +1,5 @@
 import { StyleSheet, View, Image, ScrollView } from "react-native";
-import ButtonCom from "../../components/Buttons/Button";
+import ButtonCom from "../../components/Buttons/BtnFuntion";
 import InputCom from "../../components/Inputs/Input";
 import constantes from "expo-constants";
 
