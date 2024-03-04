@@ -7,7 +7,8 @@ import Logo from '../../../assets/Logo.svg';
 import Buscar from '../../../assets/Buscar.svg';
 import Reloj from '../../../assets/Reloj.svg';
 import Corazon from '../../../assets/Corazon.svg';
-import PopUpMenuIcon from '../../../assets/popUpMenuIcon.svg';
+import PopUpMenuIcon from '../../../assets/PopUpMenuIcon.svg';
+import Cross from '../../../assets/Cross.svg';
 
 export const Iconos = {
   LogoXL: <Logo width={200} height={200} />,
@@ -16,4 +17,5 @@ export const Iconos = {
   Reloj: <Reloj width={12} height={12} />,
   Corazon: <Corazon width={25} height={25} />,
   PopUpMenuIcon: <PopUpMenuIcon width={25} height={25} />,
+  Cross: <Cross width={100} height={100} />,
 };
