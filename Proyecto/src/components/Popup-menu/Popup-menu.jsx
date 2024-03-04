@@ -1,5 +1,5 @@
 import React from 'react';
-import {View, Text} from 'react-native';
+import {View, Text, Image} from 'react-native';
 import {
   Menu,
   MenuOptions,
@@ -7,23 +7,26 @@ import {
   MenuTrigger,
   MenuProvider,
 } from 'react-native-popup-menu';
+import {Iconos} from '../Icon/constante-svg';
 
 const PopupMenu = () => {
   return (
     <>
       <MenuProvider style={styles.container}>
         <Menu>
-          <MenuTrigger text="Opciones" style={styles.MenuTrigger} />
-          <MenuOptions style={{zIndex: 10}}>
+          <MenuTrigger>
+            <View>{Iconos.PopUpMenuIcon}</View>
+          </MenuTrigger>
+          <MenuOptions optionsContainerStyle={styles.menuOptions}>
             <MenuOption
+              style={styles.menuOption}
               onSelect={() => alert(`Save`)}
-              text="Save"
-              style={{zIndex: 10}}
+              text="Editar"
             />
             <MenuOption
+              style={styles.menuOption}
               onSelect={() => alert(`Save`)}
-              text="Save"
-              style={styles.MenuOption}
+              text="Eliminar"
             />
           </MenuOptions>
         </Menu>
@@ -35,11 +38,19 @@ const PopupMenu = () => {
 const styles = {
   container: {
     flex: 1,
-    left: 130,
-    rightL: 100,
-    backgroundColor: '#B5F2B0',
-    margin: 40,
-    width: '100%',
+    justifyContent: 'center',
+    alignItems: 'center',
+    width: 150,
+    height: 120,
+  },
+
+  menuOptions: {
+    width: 200,
+    backgroundColor: '#fff',
+  },
+  menuOption: {
+    borderWidth: 0.3,
+    borderColor: '#000',
   },
 };
 
