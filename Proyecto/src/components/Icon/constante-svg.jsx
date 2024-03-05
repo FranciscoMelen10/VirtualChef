@@ -7,7 +7,7 @@ import Logo from '../../../assets/Logo.svg';
 import Buscar from '../../../assets/Buscar.svg';
 import Reloj from '../../../assets/Reloj.svg';
 import Corazon from '../../../assets/Corazon.svg';
-import PopUpMenuIcon from '../../../assets/PopUpMenuIcon.svg';
+import PopUpMenuIcon from '../../../assets/popUpMenuIcon.svg';
 import Cross from '../../../assets/Cross.svg';
 
 export const Iconos = {

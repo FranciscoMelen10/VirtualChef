@@ -1,8 +1,9 @@
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import { NavigationContainer } from "@react-navigation/native";
+
 import Login from "../../pages/Login/Login";
 import Registrar from "../../pages/Login/Registrar";
 import Principal from "../../pages/Home/Principal";
-import { NavigationContainer } from "@react-navigation/native";
 import VistaReceta from "../../pages/VistaReceta/VistaReceta";
 
 const Stack = createNativeStackNavigator();
