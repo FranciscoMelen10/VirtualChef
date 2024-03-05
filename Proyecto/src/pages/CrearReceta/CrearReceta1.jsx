@@ -2,6 +2,8 @@ import React from 'react';
 import {View, Text, StyleSheet, ScrollView, SafeAreaView} from 'react-native';
 import Input from '../../components/Inputs/Input';
 import ImgInput from '../../components/ImgInput/ImgInput';
+import BtnFuntion from '../../components/Buttons/BtnFuntion';
+import ControladorPasos from '../../components/ControladorPasos/ControladorPasos';
 
 const CrearReceta1 = () => {
   return (
@@ -14,21 +16,23 @@ const CrearReceta1 = () => {
           <View style={{width: 350, height: 350}}>
             <ImgInput />
           </View>
-          <View style={styles.inputContainer1}>
-            <Input maxLength={60} name="Nombre" />
-            <Input
-              numberOfLines={5}
-              isMultiline={true}
-              maxLength={600}
-              name="Descripción"
-            />
-          </View>
-          <View style={styles.tiempoPreparacionContainer}>
-            <Text style={styles.sectionText}>Tiempo de Preparacion</Text>
-            <Input name="Tiempo" />
-            <Text style={styles.sectionText}>Tiempo de comida</Text>
-            <Input name="Tiempo" />
-          </View>
+          <Input maxLength={60} name="Nombre" />
+          <Input
+            numberOfLines={5}
+            isMultiline={true}
+            maxLength={600}
+            name="Descripción"
+          />
+          <View style={styles.inputContainer1}></View>
+          <Text style={styles.sectionText}>Tiempo de Preparacion</Text>
+          <Input name="Tiempo" />
+          <Text style={styles.sectionText}>Horario en el día</Text>
+          <Input name="Horario" />
+          {/* <View style={styles.tiempoPreparacionContainer}></View> */}
+
+          <ControladorPasos paso={2} />
+
+          <BtnFuntion name={'Siguiente'} />
         </View>
       </ScrollView>
     </SafeAreaView>
@@ -50,6 +54,7 @@ const styles = StyleSheet.create({
   sectionText: {
     fontSize: 20,
     fontWeight: '400',
+    textAlign: 'left',
   },
 
   tiempoPreparacionContainer: {
