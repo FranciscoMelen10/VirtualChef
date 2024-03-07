@@ -2,6 +2,8 @@ import React from "react";
 import { View, Text, Image, StyleSheet } from "react-native";
 import { Iconos } from "../Icon/constante-svg";
 
+import Corazon from '../Icon/Corazon'
+
 export default function CardComidas({ name, time, imagen }) {
   return (
     <View style={styles.principal}>
@@ -14,7 +16,7 @@ export default function CardComidas({ name, time, imagen }) {
             <Text>{time + " minutos"}</Text>
           </View>
         </View>
-        {Iconos.Corazon}
+        <Corazon></Corazon>
       </View>
     </View>
   );
