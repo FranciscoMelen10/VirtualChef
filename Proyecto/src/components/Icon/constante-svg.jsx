@@ -20,6 +20,6 @@ export const Iconos = {
   Corazon: <Corazon width={25} height={25} />,
   PopUpMenuIcon: <PopUpMenuIcon width={25} height={25} />,
   Cross: <Cross width={100} height={100} />,
-  CircleGreenDark: <CircleGreenDark width={30} height={30} />,
-  CircleGreenLight: <CircleGreenLight width={30} height={30} />,
+  CircleGreenDark: <CircleGreenDark width={110} height={110} />,
+  CircleGreenLight: <CircleGreenLight width={110} height={110} />,
 };
