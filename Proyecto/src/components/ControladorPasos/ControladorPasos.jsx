@@ -7,17 +7,25 @@ const ControladorPasos = ({paso}) => {
 
   for (let i = 0; i < 4; i++) {
     if (i === paso - 1) {
-      elementos.push(<Text key={i}>{Iconos.CircleGreenDark}</Text>);
+      elementos.push(
+        <View style={styles.View} key={i}>
+          {Iconos.CircleGreenDark}
+        </View>,
+      );
     } else {
       elementos.push(
-        elementos.push(<Text key={i}>{Iconos.CircleGreenLight}</Text>),
+        elementos.push(
+          <View style={styles.View} key={i}>
+            {Iconos.CircleGreenLight}
+          </View>,
+        ),
       );
     }
   }
 
   return (
     <View style={styles.container}>
-      <Text>{elementos}</Text>
+      <Text>{elementos}</Text>;
     </View>
   );
 };
