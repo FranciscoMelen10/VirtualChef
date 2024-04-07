@@ -47,15 +47,18 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   shadow: {
-    textShadowColor: 'rgba(0, 0, 0, 1)',
-    textShadowOffset: {width: 1, height: 1},
+    textShadowColor: 'rgba(0, 0, 0)',
     textShadowRadius: 5,
     width: 30,
     height: 30,
+    alignContent: 'center',
   },
   contenedorCorazon: {
-    alignItems: 'center',
     justifyContent: 'center',
+    alignItems: 'center',
+    left: 10,
+    paddingLeft: 5,
+    
   },
 });
 

@@ -1,12 +1,16 @@
+
+// React
 import {useEffect, useState} from 'react';
 import {StyleSheet, ScrollView, Dimensions, View} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
+
+// Librerias 
 import axios from 'axios';
 
+// Componentes
 import CarruselComida from '../../components/Carrusel/CarruselComidas';
-import InputIcon from '../../components/Inputs/InputIcon';
-
 import {Iconos} from '../../components/Icon/constante-svg';
+import InputIcon from '../../components/Inputs/InputIcon';
 
 const WIDTH_WINDOW = Dimensions.get('window').width;
 
@@ -37,18 +41,21 @@ const Home = () => {
 
       <View style={styles.principal}>
         <ScrollView>
+
           <CarruselComida
             datos={recetas}
             horario={'Desayuno'}
           ></CarruselComida>
-          {/* <CarruselComida
-            datos={FOODS_CONST}
+
+          <CarruselComida
+            datos={recetas}
             horario={'Almuerzo'}
           ></CarruselComida>
+          
           <CarruselComida
-            datos={FOODS_CONST}
-            horario={'Desayuno'}
-          ></CarruselComida> */}
+            datos={recetas}
+            horario={'Cena'}
+          ></CarruselComida>
         </ScrollView>
       </View>
     </SafeAreaView>
