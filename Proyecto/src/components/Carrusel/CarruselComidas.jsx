@@ -6,6 +6,8 @@ import {
   ScrollView,
 } from 'react-native';
 
+import { getImagen } from '../../hooks/pocketbase';
+
 import CardComidas from '../Cards/CardComida';
 
 export default function CarruselComida({horario, datos}) {
@@ -16,10 +18,10 @@ export default function CarruselComida({horario, datos}) {
         {datos.map((data, index) => {
           return (
             <CardComidas
-              imagen={data.img}
-              name={data.name}
-              time={data.time}
-              key={data.name + index}
+              imagen={getImagen(data)}
+              name={data.nombre}
+              time={data.tiempoPreparacion}
+              key={data.nombre + index}
             ></CardComidas>
           );
         })}

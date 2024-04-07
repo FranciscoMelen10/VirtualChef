@@ -7,7 +7,7 @@ import Corazon from '../Icon/Corazon'
 export default function CardComidas({ name, time, imagen }) {
   return (
     <View style={styles.principal}>
-      <Image source={imagen} style={styles.image}></Image>
+      <Image src={imagen} style={styles.image}></Image>
       <View style={styles.infoContainer}>
         <View style={styles.textContainer}>
           <Text style={styles.title}>{name}</Text>
