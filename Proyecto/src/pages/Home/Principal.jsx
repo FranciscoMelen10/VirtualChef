@@ -1,16 +1,11 @@
-
-// React
-import {useEffect, useState} from 'react';
-import {StyleSheet, ScrollView, Dimensions, View} from 'react-native';
-import {SafeAreaView} from 'react-native-safe-area-context';
-
-// Librerias 
+import React, { useEffect, useState } from 'react';
+import { StyleSheet, ScrollView, Dimensions, View } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import axios from 'axios';
-
-// Componentes
 import CarruselComida from '../../components/Carrusel/CarruselComidas';
-import {Iconos} from '../../components/Icon/constante-svg';
+import { Iconos } from '../../components/Icon/constante-svg';
 import InputIcon from '../../components/Inputs/InputIcon';
+import BtnPop from '../../components/Buttons/BtnPop';
 
 const WIDTH_WINDOW = Dimensions.get('window').width;
 
@@ -20,17 +15,17 @@ const Home = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        axios.get('https://virtualchef.pockethost.io/api/collections/recetas/records')
-        .then((response) => {
-          setRecetas(response.data.items) // Ajusta esta línea según la estructura de response.data
-        });
+        // Agrega un retardo de 1 segundo antes de realizar la solicitud
+        await new Promise(resolve => setTimeout(resolve, 2000));
+        const response = await axios.get('https://virtualchef.pockethost.io/api/collections/recetas/records');
+        setRecetas(response.data.items);
       } catch (error) {
         console.log(error);
       }
     };
 
     fetchData();
-  }, []);
+  }, [recetas]);
 
   return (
     <SafeAreaView style={styles.container}>
@@ -58,6 +53,10 @@ const Home = () => {
           ></CarruselComida>
         </ScrollView>
       </View>
+
+      <View style={styles.button}>
+        <BtnPop icon={Iconos.CrearRecetas}></BtnPop>
+      </View>
     </SafeAreaView>
   );
 };
@@ -74,6 +73,11 @@ const styles = StyleSheet.create({
     flex: 1,
     width: WIDTH_WINDOW,
   },
+  button:{
+    position: 'absolute',
+    bottom: 10,
+    right: 10,
+  }
 });
 
 export default Home;

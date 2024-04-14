@@ -37,19 +37,19 @@ export default function CarruselComida({horario, datos}) {
       }
     };
     fetchData();
-  }, [datos]);
+  }, [recetas]);
   
   return (
     <View style={styles.container}>
       <Text style={styles.text}>{horario}</Text>
       <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
-        {recetas.map((data, index) => {
+        {recetas.map((data) => {
           return (
             <CardComidas
               imagen={getImagen(data)}
               name={data.nombre}
               time={data.tiempoPreparacion}
-              key={data.nombre + index}
+              key={data.id}
             ></CardComidas>
           );
         })}

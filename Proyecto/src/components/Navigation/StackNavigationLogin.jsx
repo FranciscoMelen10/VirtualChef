@@ -13,11 +13,6 @@ export function MyStackLogin() {
     <NavigationContainer theme={{ colors: "#FFF" }}>
       <Stack.Navigator>
         <Stack.Screen
-          name="VistaReceta"
-          component={VistaReceta}
-          options={{ headerShown: false }}
-        />
-        <Stack.Screen
           name="Login"
           component={Login}
           options={{ headerShown: false }}

@@ -1,39 +1,27 @@
 import React from 'react';
-import {
-  View,
-  Text,
-  Image,
-  TouchableOpacity,
-  StyleSheet,
-  Dimensions,
-} from 'react-native';
+import {View, Text, Image, TouchableOpacity, StyleSheet} from 'react-native';
 import Reloj from '../../../assets/Reloj.png';
-import {Iconos} from '../../components/Icon/constante-svg';
+import {useNavigation} from '@react-navigation/native'; // Importa el hook de navegación
 
-const WIDTH_WINDOW = Dimensions.get('window').height;
+const CardFavoritos = ({name, img, time, onPress}) => {
+  const navigation = useNavigation(); // Obtiene el objeto de navegación
 
-const CardFavoritos = ({name, img, time}) => {
-  const handleClick = () => {
-    alert('Proximamente...');
+  const handlePress = () => {
+    // Navega a la pantalla de detalle con el id del plato
+    navigation.navigate('Principal'); // Aquí deberías pasar el id correspondiente
   };
 
   return (
     <View style={styles.container}>
       <Image source={img} style={styles.image} />
       <View style={styles.content}>
-        <Text style={styles.name}>{name}</Text>
+        <TouchableOpacity onPress={handlePress}>
+          <Text style={styles.name}>{name}</Text>
+        </TouchableOpacity>
         <View style={styles.timeContainer}>
           <Image source={Reloj} style={styles.clockIcon} />
-          <Text style={styles.time}>{time + ' minutos'}</Text>
+          <Text style={styles.time}>{time + ' min'}</Text>
         </View>
-        <TouchableOpacity
-          style={styles.button}
-          onPress={handleClick}
-          activeOpacity={0.8} // Opacidad al presionar
-          disabled={false} // Cambia a true si quieres deshabilitar el botón
-        >
-          <Text style={styles.text_button}>Ver Más</Text>
-        </TouchableOpacity>
       </View>
     </View>
   );
@@ -41,65 +29,65 @@ const CardFavoritos = ({name, img, time}) => {
 
 const styles = StyleSheet.create({
   container: {
-    width: 300,
-    borderRadius: 10,
+    width: 150,
+    borderRadius: 8,
     backgroundColor: 'white',
     overflow: 'hidden',
     shadowColor: '#000',
+    marginHorizontal: 8, 
     shadowOffset: {
       width: 0,
-      height: 5,
+      height: 3, 
     },
-    shadowOpacity: 0.3,
-    shadowRadius: 6,
+    shadowOpacity: 0.6, 
+    shadowRadius: 4,
     elevation: 5,
-    marginVertical: 10,
+    marginVertical: 8, // Reducido el margen vertical
   },
   image: {
     width: '100%',
-    height: 200,
+    height: 100, // Reducida la altura de la imagen
   },
   content: {
-    padding: 8,
+    padding: 6, // Reducido el padding
   },
   name: {
-    fontSize: 20,
+    fontSize: 16, // Reducido el tamaño de la fuente
     fontWeight: 'bold',
     color: '#333',
   },
   timeContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginTop: 4,
+    marginTop: 2, // Reducido el margen superior
   },
   clockIcon: {
-    width: 20,
-    height: 20,
+    width: 16, // Reducido el tamaño del icono del reloj
+    height: 16,
   },
   time: {
-    fontSize: 12,
+    fontSize: 10, // Reducido el tamaño de la fuente
     color: '#888',
-    marginLeft: 4,
+    marginLeft: 2, // Reducido el margen izquierdo
   },
   button: {
-    borderRadius: 8,
-    backgroundColor: '#3498db', // Cambia este color al que necesites
-    paddingVertical: 10,
+    borderRadius: 6, // Reducido el radio de borde
+    backgroundColor: '#3498db',
+    paddingVertical: 8, // Reducido el padding vertical
     alignItems: 'center',
     justifyContent: 'center',
-    elevation: 5, 
-    shadowColor: '#000', 
-    shadowOpacity: 0.2, 
-    shadowRadius: 3, 
-    shadowOffset: {width: 0, height: 2}, 
-    marginVertical: 10,
+    elevation: 3, // Reducida la elevación
+    shadowColor: '#000',
+    shadowOpacity: 0.2,
+    shadowRadius: 2,
+    shadowOffset: {width: 0, height: 2},
+    marginVertical: 6, // Reducido el margen vertical
   },
   text_button: {
-    fontFamily: 'sans-serif',
-    fontSize: 12,
+    fontSize: 10, // Reducido el tamaño de la fuente
     fontWeight: 'bold',
     textTransform: 'uppercase',
-    color: '#fff', 
+    color: '#fff',
   },
 });
 

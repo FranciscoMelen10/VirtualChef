@@ -25,7 +25,6 @@ export default function CardComidas({ name, time, imagen }) {
 const styles = StyleSheet.create({
   principal: {
     width: 200,
-    height: 200,
     borderRadius: 10,
     marginRight: 20,
   },
