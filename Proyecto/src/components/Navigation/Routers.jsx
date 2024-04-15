@@ -1,37 +1,50 @@
-import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import Principal from "../../pages/Home/Principal";
-import { NavigationContainer } from "@react-navigation/native";
-import VistaReceta from "../../pages/VistaReceta/VistaReceta";
+import {createMaterialBottomTabNavigator} from '@react-navigation/material-bottom-tabs';
+import {Entypo, AntDesign, FontAwesome} from '@expo/vector-icons';
 
-const Stack = createNativeStackNavigator();
+import React from 'react';
 
-export function MyStackLogin() {
+const Favoritos = React.lazy(() => import('../../pages/Favoritos/index'));
+const Perfil = React.lazy(() => import('../../pages/Perfil/index'));
+const Principal = React.lazy(() => import('../../pages/Home/Principal'));
+
+const Tab = createMaterialBottomTabNavigator();
+
+export default function Routers() {
   return (
-    <NavigationContainer theme={{ colors: "#FFF" }}>
-      <Stack.Navigator>
-        <Stack.Screen
-          name="VistaReceta"
-          component={VistaReceta}
-          options={{ headerShown: false }}
-        />
-        <Stack.Screen
-          name="Login"
-          component={Login}
-          options={{ headerShown: false }}
-        />
-        <Stack.Screen
-          name="Registrar"
-          component={Registrar}
-          options={{ headerShown: false }}
-        />
-        <Stack.Screen
+      <Tab.Navigator
+        initialRouteName="Principal"
+        activeColor="#FFF"
+        inactiveColor="#002205"
+        activeIndicatorStyle={{backgroundColor: '#00FF0000 '}}
+        barStyle={{backgroundColor: '#246C2C', borderColor: '#000'}}
+      >
+        <Tab.Screen
           name="Principal"
           component={Principal}
-          options={{ headerShown: false }}
+          options={{
+            tabBarIcon: ({color}) => (
+              <Entypo name="home" color={color} size={25} />
+            ),
+          }}
         />
-      </Stack.Navigator>
-    </NavigationContainer>
+        <Tab.Screen
+          name="Favoritos"
+          component={Favoritos}
+          options={{
+            tabBarIcon: ({color}) => (
+              <AntDesign name="heart" size={25} color={color} />
+            ),
+          }}
+        />
+        <Tab.Screen
+          name="Perfil"
+          component={Perfil}
+          options={{
+            tabBarIcon: ({color}) => (
+              <FontAwesome name="user" size={25} color={color} />
+            ),
+          }}
+        />
+      </Tab.Navigator>
   );
 }
-
-export default MyStackLogin;

@@ -1,105 +1,68 @@
-// import Corazon from "../../assets/Corazon.svg";
-import React from "react";
+// React
+import React, { useEffect, useState } from 'react';
 import {
   StyleSheet,
   Text,
   View,
-  Dimensions,
-  SafeAreaView,
   ScrollView,
-} from "react-native";
+} from 'react-native';
 
-import CardComidas from "../Cards/CardComida";
-import Ejemplo from "../../../assets/Ejemplo.png";
-import Ejemplo2 from "../../../assets/Ejemplo2.png";
-import Ejemplo3 from "../../../assets/Ejemplo3.png";
+// Librerias
+import axios from 'axios';
 
-const WIDTH_WINDOW = Dimensions.get("window").width;
-// const HEIGHT_WINDOW = Dimensions.get("window").height;
+// Hooks
+import { getImagen } from '../../hooks/pocketbase';
 
-const FOODS_CONST = [
-  {
-    name: "Pollo frito",
-    time: "10",
-    img: Ejemplo,
-  },
-  {
-    name: "Pescado frito",
-    time: "10",
-    img: Ejemplo2,
-  },
-  {
-    name: "Ensalada",
-    time: "10",
-    img: Ejemplo3,
-  },
-];
+// Componentes
+import CardComidas from '../Cards/CardComida';
 
-export default function CarruselComida() {
+export default function CarruselComida({horario, datos}) {
+  
+  const [recetas, setRecetas] = useState([]);
+  const [tiempo, setTiempo] = useState([]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        axios.get('https://virtualchef.pockethost.io/api/collections/horario/records')
+        .then((response) => {
+          // Conseguir el id del horario
+          setTiempo(response.data.items.filter(item => item.nombre === horario))
+
+          // Filtrar las recetas por el id del horario
+          setRecetas(datos.filter((datos) => datos.horarioId === tiempo[0].id))
+        });
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    fetchData();
+  }, [recetas]);
+  
   return (
-    <SafeAreaView style={styles.principal}>
-      <ScrollView>
-        {/* Desayuno */}
-        <View style={styles.container}>
-          <Text style={styles.text}>Desayuno</Text>
-          <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
-            {FOODS_CONST.map((data, index) => {
-              return (
-                <CardComidas
-                  imagen={data.img}
-                  name={data.name}
-                  time={data.time}
-                  key={data.name + index}
-                ></CardComidas>
-              );
-            })}
-          </ScrollView>
-        </View>
-
-        <View style={styles.container}>
-          <Text style={styles.text}>Almuerzo</Text>
-          <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
-            {FOODS_CONST.map((data, index) => {
-              return (
-                <CardComidas
-                  imagen={data.img}
-                  name={data.name}
-                  time={data.time}
-                  key={data.name + index}
-                ></CardComidas>
-              );
-            })}
-          </ScrollView>
-        </View>
-
-        <View style={styles.container}>
-          <Text style={styles.text}>Cena</Text>
-          <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
-            {FOODS_CONST.map((data, index) => {
-              return (
-                <CardComidas
-                  imagen={data.img}
-                  name={data.name}
-                  time={data.time}
-                  key={data.name + index}
-                ></CardComidas>
-              );
-            })}
-          </ScrollView>
-        </View>
+    <View style={styles.container}>
+      <Text style={styles.text}>{horario}</Text>
+      <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
+        {recetas.map((data) => {
+          return (
+            <CardComidas
+              imagen={getImagen(data)}
+              name={data.nombre}
+              time={data.tiempoPreparacion}
+              key={data.id}
+            ></CardComidas>
+          );
+        })}
       </ScrollView>
-    </SafeAreaView>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
-  principal: {
-    flex: 1,
-    width: WIDTH_WINDOW,
-  },
+
   text: {
     fontSize: 30,
-    fontWeight: "bold",
+    fontWeight: 'bold',
   },
   container: {
     margin: 20,
