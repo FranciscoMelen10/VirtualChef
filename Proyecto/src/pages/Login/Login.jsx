@@ -2,10 +2,10 @@ import {StyleSheet, View, Image, TouchableOpacity, Text} from 'react-native';
 import {Iconos} from '../../components/Icon/constante-svg';
 import {useForm, Controller} from 'react-hook-form';
 import {Button, TextInput} from 'react-native-paper';
-import { useEffect, useState } from 'react';
-import { loginUsuario } from '../../hooks/Usuarios';
+import {useEffect, useState} from 'react';
+import {loginUsuario} from '../../hooks/Usuarios';
 import Routers from '../../components/Navigation/Routers';
-
+import Input from '../../components/Inputs/Input';
 
 export default function Login({navigation}) {
   const {
@@ -15,37 +15,31 @@ export default function Login({navigation}) {
   } = useForm({});
   const onSubmit = async (data) => {
     console.log(data);
-    const user = await loginUsuario(data.correo, data.clave);
+    const user = await loginUsuario(data.correo_electronico, data.clave);
     if (user) {
-      alert("Acceso correcto");
+      alert('Acceso correcto');
       navigation.navigate('Home');
     }
-  }
+  };
 
-  const [user, setUser] = useState([]);
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        // Agrega un retardo de 1 segundo antes de realizar la solicitud
-        await new Promise(resolve => setTimeout(resolve, 2000));
-        // const response = await axios.get('https://virtualchef.pockethost.io/api/collections/users/records');
-      } catch (error) {
-        console.log(error);
-      }
-    };
+  // const [user, setUser] = useState([]);
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     try {
+  //       
+  //     } catch (error) {
+  //       console.log(error);
+  //     }
+  //   };
 
-    fetchData();
-  }, [user]);
-
-  // user.map((item) => {
-  //   console.log(item.nombre);
-  //   console.log(item.contraseña);
-  // })
+  //   fetchData();
+  // }, [user]);
 
   return (
     <View style={styles.contenedor_principal}>
       {Iconos.LogoXL}
       <View style={styles.contenedor}>
+        {/* Correo electronico */}
         <Controller
           control={control}
           rules={{
@@ -53,22 +47,23 @@ export default function Login({navigation}) {
           }}
           render={({field: {onChange, onBlur, value}}) => (
             <View style={styles.containerInput}>
-              <TextInput
-                placeholder="Correo"
+              <Input
                 onBlur={onBlur}
                 onChangeText={onChange}
                 value={value}
-                style={styles.input}
+                name={'Correo electronico'}
               />
-              <Text style={styles.text_location}>{'Correo electronico'}</Text>
             </View>
           )}
-          name="correo"
+          name="correo_electronico"
         />
-        {errors.correo && (
-          <Text style={styles.errorMessa}>Ha ocurrido un error.</Text>
+        {errors.correo_electronico && (
+          <Text style={styles.errorMessa}>
+            Intente ingresar nuevamente su correo electronico.
+          </Text>
         )}
 
+        {/* Correo electronico */}
         <Controller
           control={control}
           rules={{
@@ -76,21 +71,21 @@ export default function Login({navigation}) {
           }}
           render={({field: {onChange, onBlur, value}}) => (
             <View style={styles.containerInput}>
-              <TextInput
-                placeholder="Contraseña"
+              <Input
                 onBlur={onBlur}
                 onChangeText={onChange}
                 value={value}
-                style={styles.input}
+                name={'Contraseña'}
                 secureTextEntry={true}
               />
-              <Text style={styles.text_location}>{'Contraseña'}</Text>
             </View>
           )}
           name="clave"
         />
         {errors.clave && (
-          <Text style={styles.errorMessa}>Ha ocurrido un error.</Text>
+          <Text style={styles.errorMessa}>
+            Intente ingresar nuevamente su contraseña.
+          </Text>
         )}
       </View>
       <View style={styles.contenedor}>
@@ -151,7 +146,8 @@ const styles = StyleSheet.create({
     zIndex: 0, // Asegura que el TextInput esté detrás del Text
   },
   buttonContainer: {
-    padding: 10,
+    alignItems: 'center',
+    justifyContent: 'center',
     backgroundColor: '#246C2C',
     borderRadius: 24,
     width: 200,
@@ -160,7 +156,6 @@ const styles = StyleSheet.create({
   buttonText: {
     color: '#fff',
     fontWeight: 'bold',
-    textAlign: 'center',
     fontSize: 20,
   },
   errorMessa: {

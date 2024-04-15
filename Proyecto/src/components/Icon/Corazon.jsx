@@ -47,7 +47,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   shadow: {
-    textShadowColor: 'rgba(0, 0, 0)',
     textShadowRadius: 5,
     width: 30,
     height: 30,

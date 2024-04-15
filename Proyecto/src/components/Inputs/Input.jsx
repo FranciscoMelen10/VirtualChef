@@ -9,6 +9,8 @@ const Input = ({
   onBlur,
   onChangeText,
   value,
+  secureTextEntry = false,
+
 }) => {
   return (
     <View style={styles.container}>
@@ -21,6 +23,7 @@ const Input = ({
         onBlur={onBlur}
         onChangeText={onChangeText}
         value={value}
+        secureTextEntry={secureTextEntry}
       />
       <Text style={styles.text_location}>{name}</Text>
     </View>

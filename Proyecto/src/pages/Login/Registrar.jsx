@@ -6,7 +6,7 @@ import {useForm, Controller} from 'react-hook-form';
 import Input from '../../components/Inputs/Input';
 import {Text} from 'react-native';
 import {Button} from 'react-native-paper';
-import { createUser } from '../../hooks/Usuarios';
+import {createUser} from '../../hooks/Usuarios';
 
 const HEIGHT_WINDOW = Dimensions.get('window').height;
 
@@ -18,8 +18,12 @@ export default function Registrar({navigation}) {
   } = useForm({});
 
   const onSubmit = async (data) => {
-    createUser(data)
-    
+    if (data.contraseña !== data.confirmar_contraseña) {
+      alert('Las contraseñas no coinciden');
+      return;
+    }
+    createUser(data);
+    navigation.navigate('Login');
   };
 
   return (
@@ -46,7 +50,9 @@ export default function Registrar({navigation}) {
             name="correo_electronico"
           />
           {errors.correo_electronico && (
-            <Text style={styles.errorMessa}>Ha ocurrido un error.</Text>
+            <Text style={styles.errorMessa}>
+              Intente ingresar nuevamente su correo electronico.
+            </Text>
           )}
 
           {/* Nombre */}
@@ -68,7 +74,9 @@ export default function Registrar({navigation}) {
             name="nombre"
           />
           {errors.nombre && (
-            <Text style={styles.errorMessa}>Ha ocurrido un error.</Text>
+            <Text style={styles.errorMessa}>
+              Intente ingresar nuevamente su nombre.
+            </Text>
           )}
 
           {/* Apellido */}
@@ -91,7 +99,9 @@ export default function Registrar({navigation}) {
             name="apellido"
           />
           {errors.apellido && (
-            <Text style={styles.errorMessa}>Ha ocurrido un error.</Text>
+            <Text style={styles.errorMessa}>
+              Intente ingresar nuevamente su apellido.
+            </Text>
           )}
 
           {/* Nombre de usuario */}
@@ -114,7 +124,9 @@ export default function Registrar({navigation}) {
             name="nombre_de_usuario"
           />
           {errors.nombre_de_usuario && (
-            <Text style={styles.errorMessa}>Ha ocurrido un error.</Text>
+            <Text style={styles.errorMessa}>
+              Intente ingresar nuevamente su nombre de usuario.
+            </Text>
           )}
 
           {/* Contraseña */}
@@ -131,13 +143,16 @@ export default function Registrar({navigation}) {
                   value={value}
                   style={styles.input}
                   name={'Contraseña'}
+                  secureTextEntry={true}
                 />
               </View>
             )}
             name="contraseña"
           />
           {errors.contraseña && (
-            <Text style={styles.errorMessa}>Ha ocurrido un error.</Text>
+            <Text style={styles.errorMessa}>
+              Intente ingresar nuevamente su contraseña.
+            </Text>
           )}
 
           {/* Confirmar contraseña */}
@@ -154,13 +169,16 @@ export default function Registrar({navigation}) {
                   value={value}
                   style={styles.input}
                   name={'Confirmar contraseña'}
+                  secureTextEntry={true}
                 />
               </View>
             )}
-            name="confirmar_clave"
+            name="confirmar_contraseña"
           />
-          {errors.confirmar_clave && (
-            <Text style={styles.errorMessa}>Ha ocurrido un error.</Text>
+          {errors.confirmar_contraseña && (
+            <Text style={styles.errorMessa}>
+              Intente ingresar nuevamente su contraseña.
+            </Text>
           )}
         </View>
 
@@ -169,7 +187,7 @@ export default function Registrar({navigation}) {
           style={styles.buttonContainer}
           onPress={handleSubmit(onSubmit)}
         >
-          <Text style={styles.buttonText}>Iniciar Sesión</Text>
+          <Text style={styles.buttonText}>Registrar usuario</Text>
         </Button>
       </View>
     </ScrollView>
@@ -201,5 +219,18 @@ const styles = StyleSheet.create({
   },
   errorMessa: {
     color: 'red',
+  },
+  buttonContainer: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: '#246C2C',
+    borderRadius: 24,
+    width: 200,
+    height: 50,
+  },
+  buttonText: {
+    color: '#fff',
+    fontWeight: 'bold',
+    fontSize: 20,
   },
 });
