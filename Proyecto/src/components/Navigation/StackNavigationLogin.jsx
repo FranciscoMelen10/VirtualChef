@@ -5,12 +5,13 @@ import Login from "../../pages/Login/Login";
 import Registrar from "../../pages/Login/Registrar";
 import Principal from "../../pages/Home/Principal";
 import VistaReceta from "../../pages/VistaReceta/VistaReceta";
+import Routers from "./Routers";
 
 const Stack = createNativeStackNavigator();
 
 export function MyStackLogin() {
   return (
-    <NavigationContainer theme={{ colors: "#FFF" }}>
+    <NavigationContainer>
       <Stack.Navigator>
         <Stack.Screen
           name="Login"
@@ -23,12 +24,13 @@ export function MyStackLogin() {
           options={{ headerShown: false }}
         />
         <Stack.Screen
-          name="Principal"
-          component={Principal}
+          name="Home"
+          component={Routers}
           options={{ headerShown: false }}
         />
       </Stack.Navigator>
-    </NavigationContainer>
+      </NavigationContainer>
+
   );
 }
 

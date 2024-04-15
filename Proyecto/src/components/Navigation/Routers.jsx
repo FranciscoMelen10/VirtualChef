@@ -1,31 +1,18 @@
 import {createMaterialBottomTabNavigator} from '@react-navigation/material-bottom-tabs';
-import {NavigationContainer} from '@react-navigation/native';
 import {Entypo, AntDesign, FontAwesome} from '@expo/vector-icons';
-import {ActivityIndicator, StyleSheet, View} from 'react-native';
 
 import React from 'react';
 
 const Favoritos = React.lazy(() => import('../../pages/Favoritos/index'));
 const Perfil = React.lazy(() => import('../../pages/Perfil/index'));
 const Principal = React.lazy(() => import('../../pages/Home/Principal'));
-const VistaReceta = React.lazy(
-  () => import('../../pages/VistaReceta/VistaReceta'),
-);
-
 
 const Tab = createMaterialBottomTabNavigator();
 
-function MyTabs() {
+export default function Routers() {
   return (
-    <React.Suspense
-      fallback={
-        <View style={[styles.container]}>
-          <ActivityIndicator size="large" color={"#246C2C"}/>
-        </View>
-      }
-    >
       <Tab.Navigator
-        initialRouteName="Favoritos"
+        initialRouteName="Principal"
         activeColor="#FFF"
         inactiveColor="#002205"
         activeIndicatorStyle={{backgroundColor: '#00FF0000 '}}
@@ -59,24 +46,5 @@ function MyTabs() {
           }}
         />
       </Tab.Navigator>
-    </React.Suspense>
-  );
-}
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-    padding: 10,
-  },
-});
-
-export default function Routers() {
-  return (
-    <NavigationContainer>
-      <MyTabs />
-    </NavigationContainer>
   );
 }
