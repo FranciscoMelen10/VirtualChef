@@ -5,7 +5,7 @@ const pb = new PocketBase('https://virtualchef.pockethost.io');
 // globally disable auto cancellation
 pb.autoCancellation(false);
 
-export async function createUser(data) {
+async function createUser(data) {
 
     // Buscar el ID del rol de "usuario"
     const idRol = await pb.collection("roles").getFullList({}, {
@@ -24,6 +24,7 @@ export async function createUser(data) {
             apellido: data.apellido,
             rolID: idRol[0].id// ID del rol de usuario
         }
+        console.log(datos);
 
         // Comprueba si hay un usuario con el mismo correo o nombre de usuario
         const user = await existeUsuario(datos.email, datos.username)
@@ -33,6 +34,7 @@ export async function createUser(data) {
             alert("Usuario ya existe, intente con otro correo o nombre de usuario");
         } else {
             // Crea el usuario, porque no existe
+            console.log("Creando usuario...");
             await pb.collection('users').create(datos);
             alert("Usuario creado con exito");
         }
@@ -56,4 +58,21 @@ async function loginUsuario(email, password) {
     }
 }
 
-export { loginUsuario };
+async function existeUsuario(email, username, id) {
+    try {
+      // Busca si hay un usuario con el mismo correo o nombre de usuario
+      const user = await pb.collection("users").getFullList(
+        {},
+        {
+          filter: `email = "${email}" || username = "${username}" || id = "${id}"`,
+        }
+      );
+  
+      // Devuelve un arreglo con los usuarios que coinciden con el correo o nombre de usuario
+      return user;
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+export { loginUsuario, createUser, existeUsuario };

@@ -6,6 +6,9 @@ const Input = ({
   isMultiline = false,
   numberOfLines = 1,
   maxLength = 20,
+  onBlur,
+  onChangeText,
+  value,
 }) => {
   return (
     <View style={styles.container}>
@@ -15,6 +18,9 @@ const Input = ({
         numberOfLines={numberOfLines}
         maxLength={maxLength}
         style={styles.input}
+        onBlur={onBlur}
+        onChangeText={onChangeText}
+        value={value}
       />
       <Text style={styles.text_location}>{name}</Text>
     </View>
