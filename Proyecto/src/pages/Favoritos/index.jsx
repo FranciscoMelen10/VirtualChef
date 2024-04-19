@@ -1,5 +1,5 @@
-import React from 'react';
-import {View, StyleSheet, ScrollView, Dimensions} from 'react-native';
+import React, { useContext, useEffect, useState } from 'react';
+import { StyleSheet, FlatList, Dimensions} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 
 import {Iconos} from '../../components/Icon/constante-svg';
@@ -9,6 +9,8 @@ import CardFavoritos from '../../components/Cards/CardFavoritos';
 import Ejemplo from '../../../assets/Ejemplo.png';
 import Ejemplo2 from '../../../assets/Ejemplo2.png';
 import Ejemplo3 from '../../../assets/Ejemplo3.png';
+import { getFavoritos } from '../../hooks/Favoritos';
+import { UserContext } from '../../contexts/userContext';
 
 const WIDTH_WINDOW = Dimensions.get('window').height;
 
@@ -46,23 +48,42 @@ const DATA = [
 ];
 
 function Favoritos() {
+    const { user } = useContext(UserContext);
+  const [userIsValid, setUserIsValid] = useState(false);
+
+  const [favoritos, setFavoritos] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    const Favoritos = async () => {
+      try {
+        setFavoritos(await getFavoritos(user.id));
+        console.log(favoritos);
+        //Cuando cargue todo, se mostrara el contenido
+        setIsLoading(false);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+    Favoritos();
+  }, [user.id]);
   return (
     <SafeAreaView style={styles.contenedor_principal}>
       <InputIcon icono={Iconos.Buscar} placeholder={'Buscar en favoritos...'} />
-      <ScrollView contentContainerStyle={styles.container}>
-        <View style={styles.centeredContent}>
-          <View style={styles.contenedor_favoritos}>
-            {DATA.map((info, index) => (
-              <CardFavoritos
-                img={info.img}
-                name={info.name}
-                time={info.time}
-                key={info.name + index}
-              />
-            ))}
-          </View>
-        </View>
-      </ScrollView>
+      <FlatList
+        contentContainerStyle={styles.container}
+        data={DATA}
+        renderItem={({item, index}) => (
+          <CardFavoritos
+            img={item.img}
+            name={item.name}
+            time={item.time}
+            key={item.name + index}
+          />
+        )}
+        numColumns={2}
+        keyExtractor={(item, index) => item.name + index}
+      />
     </SafeAreaView>
   );
 }
@@ -75,12 +96,10 @@ const styles = StyleSheet.create({
   container: {
     flexGrow: 1,
     justifyContent: 'center',
+    alignItems: 'center',
   },
   centeredContent: {
     alignItems: 'center',
-  },
-  contenedor_favoritos: {
-    // Estilos adicionales para tu contenedor de favoritos
   },
 });
 

@@ -1,33 +1,45 @@
-import React, {useEffect, useState} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import {StyleSheet, ScrollView, Dimensions, View} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
-import axios from 'axios';
-import CarruselComida from '../../components/Carrusel/CarruselComidas';
+
+// Iconos
 import {Iconos} from '../../components/Icon/constante-svg';
+
+// Componentes
 import InputIcon from '../../components/Inputs/InputIcon';
 import BtnPop from '../../components/Buttons/BtnPop';
+import CarruselComida from '../../components/Carrusel/CarruselComidas';
+
+// Contextos
+import {useRecetas} from '../../hooks/Recetas';
+import { UserContext } from '../../contexts/userContext';
 
 const WIDTH_WINDOW = Dimensions.get('window').width;
 
 const Home = ({navigation}) => {
-  const [recetas, setRecetas] = useState([]);
+  const { user } = useContext(UserContext);
+
+  // useState para obtener las recetas
+  const {getRecetasMenu} = useRecetas();
+  // useState para guardar las recetas de desayuno, almuerzo y cena
+  const [Desayunos, setDesayunos] = useState([]);
+  const [Almuerzos, setAlmuerzos] = useState([]);
+  const [Cenas, setCenas] = useState([]);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        // Agrega un retardo de 1 segundo antes de realizar la solicitud
-        await new Promise((resolve) => setTimeout(resolve, 2000));
-        const response = await axios.get(
-          'https://virtualchef.pockethost.io/api/collections/recetas/records',
-        );
-        setRecetas(response.data.items);
+        // Fetch data from API
+        setDesayunos(await getRecetasMenu('Desayuno'));
+        setAlmuerzos(await getRecetasMenu('Almuerzo'));
+        setCenas(await getRecetasMenu('Cena'));
       } catch (error) {
         console.log(error);
       }
     };
 
     fetchData();
-  }, [recetas]);
+  }, []);
 
   return (
     <SafeAreaView style={styles.container}>
@@ -40,19 +52,19 @@ const Home = ({navigation}) => {
         <ScrollView>
           <CarruselComida
             navigation={navigation}
-            datos={recetas}
+            datos={Desayunos}
             horario={'Desayuno'}
           ></CarruselComida>
 
           <CarruselComida
             navigation={navigation}
-            datos={recetas}
+            datos={Almuerzos}
             horario={'Almuerzo'}
           ></CarruselComida>
 
           <CarruselComida
             navigation={navigation}
-            datos={recetas}
+            datos={Cenas}
             horario={'Cena'}
           ></CarruselComida>
         </ScrollView>
