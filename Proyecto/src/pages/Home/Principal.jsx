@@ -1,5 +1,11 @@
 import React, {useContext, useEffect, useState} from 'react';
-import {StyleSheet, ScrollView, Dimensions, View} from 'react-native';
+import {
+  StyleSheet,
+  ScrollView,
+  Dimensions,
+  View,
+  ActivityIndicator,
+} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 
 // Iconos
@@ -12,12 +18,14 @@ import CarruselComida from '../../components/Carrusel/CarruselComidas';
 
 // Contextos
 import {useRecetas} from '../../hooks/Recetas';
-import { UserContext } from '../../contexts/userContext';
+import {UserContext} from '../../contexts/userContext';
 
 const WIDTH_WINDOW = Dimensions.get('window').width;
+const HEIGHT_WINDOW = Dimensions.get('window').height;
+
 
 const Home = ({navigation}) => {
-  const { user } = useContext(UserContext);
+  const {user} = useContext(UserContext);
 
   // useState para obtener las recetas
   const {getRecetasMenu} = useRecetas();
@@ -25,6 +33,7 @@ const Home = ({navigation}) => {
   const [Desayunos, setDesayunos] = useState([]);
   const [Almuerzos, setAlmuerzos] = useState([]);
   const [Cenas, setCenas] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -33,6 +42,9 @@ const Home = ({navigation}) => {
         setDesayunos(await getRecetasMenu('Desayuno'));
         setAlmuerzos(await getRecetasMenu('Almuerzo'));
         setCenas(await getRecetasMenu('Cena'));
+
+        //Cuando cargue todo, se mostrara el contenido
+        setIsLoading(false);
       } catch (error) {
         console.log(error);
       }
@@ -41,40 +53,50 @@ const Home = ({navigation}) => {
     fetchData();
   }, []);
 
-  return (
-    <SafeAreaView style={styles.container}>
-      <InputIcon
-        placeholder={'Buscar recetas...'}
-        icono={Iconos.Buscar}
-      ></InputIcon>
-
-      <View style={styles.principal}>
-        <ScrollView>
-          <CarruselComida
-            navigation={navigation}
-            datos={Desayunos}
-            horario={'Desayuno'}
-          ></CarruselComida>
-
-          <CarruselComida
-            navigation={navigation}
-            datos={Almuerzos}
-            horario={'Almuerzo'}
-          ></CarruselComida>
-
-          <CarruselComida
-            navigation={navigation}
-            datos={Cenas}
-            horario={'Cena'}
-          ></CarruselComida>
-        </ScrollView>
+  if (!isLoading) {
+    return (
+      <SafeAreaView style={styles.container}>
+        <InputIcon
+          placeholder={'Buscar recetas...'}
+          icono={Iconos.Buscar}
+        ></InputIcon>
+  
+        <View style={styles.principal}>
+          <ScrollView>
+            <CarruselComida
+              navigation={navigation}
+              datos={Desayunos}
+              horario={'Desayuno'}
+            ></CarruselComida>
+  
+            <CarruselComida
+              navigation={navigation}
+              datos={Almuerzos}
+              horario={'Almuerzo'}
+            ></CarruselComida>
+  
+            <CarruselComida
+              navigation={navigation}
+              datos={Cenas}
+              horario={'Cena'}
+            ></CarruselComida>
+          </ScrollView>
+        </View>
+  
+        <View style={styles.button}>
+          <BtnPop icon={Iconos.CrearRecetas}></BtnPop>
+        </View>
+      </SafeAreaView>
+    );
+  }else{
+    return(
+      <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+        <ActivityIndicator size="large" color="#246C2C" />
       </View>
+    )
 
-      <View style={styles.button}>
-        <BtnPop icon={Iconos.CrearRecetas}></BtnPop>
-      </View>
-    </SafeAreaView>
-  );
+  }
+
 };
 
 const styles = StyleSheet.create({

@@ -23,7 +23,7 @@ export default function CardComidas({name, time, imagen, id, navigation}) {
             <Text>{time + ' minutos'}</Text>
           </View>
         </View>
-        <Corazon></Corazon>
+        <Corazon id_receta={id}></Corazon>
       </View>
     </TouchableOpacity>
   );

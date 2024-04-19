@@ -6,8 +6,7 @@ async function findFavoritos(usuarioId, recetasId) {
         const favoritosUser = await pb.collection("usuario_recetas_favoritas").getFullList({}, {
             filter: `recetasId = "${recetasId}" && usuarioId = "${usuarioId}"`,
         });
-        const validar = favoritosUser.length > 0 ? true : false;
-        return validar;
+        return favoritosUser.length > 0 ? true : false;
 
     } catch (error) {
         alert(error);
