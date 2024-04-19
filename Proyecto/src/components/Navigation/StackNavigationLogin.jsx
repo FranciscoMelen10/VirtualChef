@@ -7,37 +7,40 @@ import Principal from '../../pages/Home/Principal';
 import VistaReceta from '../../pages/VistaReceta/VistaReceta';
 import Routers from './Routers';
 import {RecetaProvider} from '../../contexts/recetaContext/recetaContext';
+import {UserProvider} from '../../contexts/userContext';
 
 const Stack = createNativeStackNavigator();
 
 export function MyStackLogin() {
   return (
-    <RecetaProvider>
-      <NavigationContainer>
-        <Stack.Navigator>
-          <Stack.Screen
-            name="Login"
-            component={Login}
-            options={{headerShown: false}}
-          />
-          <Stack.Screen
-            name="Home"
-            component={Routers}
-            options={{headerShown: false}}
-          />
-          <Stack.Screen
-            name="Registrar"
-            component={Registrar}
-            options={{headerShown: false}}
-          />
-          <Stack.Screen
-            name="VistaReceta"
-            component={VistaReceta}
-            options={{headerShown: false}}
-          />
-        </Stack.Navigator>
-      </NavigationContainer>
-    </RecetaProvider>
+    <UserProvider>
+      <RecetaProvider>
+        <NavigationContainer>
+          <Stack.Navigator>
+            <Stack.Screen
+              name="Login"
+              component={Login}
+              options={{headerShown: false}}
+            />
+            <Stack.Screen
+              name="Home"
+              component={Routers}
+              options={{headerShown: false}}
+            />
+            <Stack.Screen
+              name="Registrar"
+              component={Registrar}
+              options={{headerShown: false}}
+            />
+            <Stack.Screen
+              name="VistaReceta"
+              component={VistaReceta}
+              options={{headerShown: false}}
+            />
+          </Stack.Navigator>
+        </NavigationContainer>
+      </RecetaProvider>
+    </UserProvider>
   );
 }
 

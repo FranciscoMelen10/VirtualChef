@@ -1,7 +1,7 @@
 import React from 'react';
 import {View, Text, Image, TouchableOpacity, StyleSheet} from 'react-native';
-import Reloj from '../../../assets/Reloj.png';
 import {useNavigation} from '@react-navigation/native'; // Importa el hook de navegación
+import {Iconos} from '../../components/Icon/constante-svg';
 
 const CardFavoritos = ({name, img, time, onPress}) => {
   const navigation = useNavigation(); // Obtiene el objeto de navegación
@@ -19,7 +19,9 @@ const CardFavoritos = ({name, img, time, onPress}) => {
           <Text style={styles.name}>{name}</Text>
         </TouchableOpacity>
         <View style={styles.timeContainer}>
-          <Image source={Reloj} style={styles.clockIcon} />
+          {
+            Iconos.Reloj
+          }
           <Text style={styles.time}>{time + ' min'}</Text>
         </View>
       </View>
@@ -60,10 +62,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     marginTop: 2, // Reducido el margen superior
-  },
-  clockIcon: {
-    width: 16, // Reducido el tamaño del icono del reloj
-    height: 16,
   },
   time: {
     fontSize: 10, // Reducido el tamaño de la fuente
