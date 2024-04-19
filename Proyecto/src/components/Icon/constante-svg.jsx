@@ -12,6 +12,7 @@ import Cross from '../../../assets/Cross.svg';
 import CircleGreenDark from '../../../assets/CircleGreenDark.svg';
 import CircleGreenLight from '../../../assets/CircleGreenLight.svg';
 import CrearRecetas from '../../../assets/Create-pencil.svg';
+import Back from '../../../assets/Back.svg';
 
 export const Iconos = {
   LogoXL: <Logo width={200} height={200} />,
@@ -24,4 +25,5 @@ export const Iconos = {
   CircleGreenDark: <CircleGreenDark width={110} height={110} />,
   CircleGreenLight: <CircleGreenLight width={110} height={110} />,
   CrearRecetas: <CrearRecetas width={25} height={25} />,
+  Back: <Back width={25} height={25} />,
 };
