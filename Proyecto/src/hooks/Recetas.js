@@ -1,4 +1,6 @@
+import { getHorario } from './Horarios';
 import {pb} from './pocketbase';
+
 
 function useRecetas() {
   async function getRecetas() {

@@ -2,12 +2,15 @@ import {StyleSheet, View, Image, TouchableOpacity, Text} from 'react-native';
 import {Iconos} from '../../components/Icon/constante-svg';
 import {useForm, Controller} from 'react-hook-form';
 import {Button, TextInput} from 'react-native-paper';
-import {useEffect, useState} from 'react';
+import {useContext, useEffect, useState} from 'react';
 import {loginUsuario} from '../../hooks/Usuarios';
 import Routers from '../../components/Navigation/Routers';
 import Input from '../../components/Inputs/Input';
+import { UserContext } from '../../contexts/userContext';
 
 export default function Login({navigation}) {
+  const { updateUser } = useContext(UserContext);
+
   const {
     control,
     handleSubmit,
@@ -18,6 +21,7 @@ export default function Login({navigation}) {
     const user = await loginUsuario(data.correo_electronico, data.clave);
     if (user) {
       alert('Acceso correcto');
+      updateUser(user.record.id);
       navigation.navigate('Home');
     }
   };
