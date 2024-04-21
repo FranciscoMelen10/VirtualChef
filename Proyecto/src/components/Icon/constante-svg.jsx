@@ -13,6 +13,8 @@ import CircleGreenDark from '../../../assets/CircleGreenDark.svg';
 import CircleGreenLight from '../../../assets/CircleGreenLight.svg';
 import CrearRecetas from '../../../assets/Create-pencil.svg';
 import Back from '../../../assets/Back.svg';
+import Plus from '../../../assets/Plus.svg';
+import Trash from '../../../assets/Trash.svg';
 
 export const Iconos = {
   LogoXL: <Logo width={200} height={200} />,
@@ -26,4 +28,6 @@ export const Iconos = {
   CircleGreenLight: <CircleGreenLight width={110} height={110} />,
   CrearRecetas: <CrearRecetas width={25} height={25} />,
   Back: <Back width={25} height={25} />,
+  Plus: <Plus width={25} height={25} />,
+  Trash: <Trash width={25} height={25} />,
 };
