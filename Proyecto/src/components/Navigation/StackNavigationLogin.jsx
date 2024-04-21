@@ -7,6 +7,9 @@ import Principal from '../../pages/Home/Principal';
 import VistaReceta from '../../pages/VistaReceta/VistaReceta';
 import Routers from './Routers';
 import {RecetaProvider} from '../../contexts/recetaContext/recetaContext';
+import CrearReceta1 from '../../pages/CrearReceta/CrearReceta1';
+import CrearReceta2 from '../../pages/CrearReceta/CrearReceta2';
+import CrearReceta3 from '../../pages/CrearReceta/CrearReceta3';
 
 const Stack = createNativeStackNavigator();
 
@@ -33,6 +36,21 @@ export function MyStackLogin() {
           <Stack.Screen
             name="VistaReceta"
             component={VistaReceta}
+            options={{headerShown: false}}
+          />
+          <Stack.Screen
+            name="CrearReceta1"
+            component={CrearReceta1}
+            options={{headerShown: false}}
+          />
+          <Stack.Screen
+            name="CrearReceta2"
+            component={CrearReceta2}
+            options={{headerShown: false}}
+          />
+          <Stack.Screen
+            name="CrearReceta3"
+            component={CrearReceta3}
             options={{headerShown: false}}
           />
         </Stack.Navigator>

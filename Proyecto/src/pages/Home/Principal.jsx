@@ -59,7 +59,12 @@ const Home = ({navigation}) => {
       </View>
 
       <View style={styles.button}>
-        <BtnPop icon={Iconos.CrearRecetas}></BtnPop>
+        <BtnPop
+          onPress={() => {
+            navigation.navigate('CrearReceta1');
+          }}
+          icon={Iconos.CrearRecetas}
+        ></BtnPop>
       </View>
     </SafeAreaView>
   );

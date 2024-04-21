@@ -1,10 +1,12 @@
 import React from 'react';
 import {View, Text, StyleSheet, Image, TouchableOpacity} from 'react-native';
+import {RecetaContext} from '../../contexts/recetaContext/recetaContext';
 import {Iconos} from '../Icon/constante-svg';
 import * as ImagePicker from 'expo-image-picker';
 
 const ImgInput = () => {
   const [selectedImage, setSelectedImage] = React.useState(null);
+  const {imagen, setImagen} = React.useContext(RecetaContext);
 
   const pickImage = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
@@ -14,7 +16,7 @@ const ImgInput = () => {
       quality: 1,
     });
     if (!result.canceled) {
-      setSelectedImage(result.assets[0].uri);
+      setImagen(result.assets[0].uri);
     }
   };
 
@@ -23,9 +25,9 @@ const ImgInput = () => {
       <TouchableOpacity onPress={pickImage}>
         <View style={styles.imgInput}>
           <View style={styles.crossIconWrapper}>{Iconos.Cross}</View>
-          {selectedImage && (
+          {imagen && (
             <Image
-              source={{uri: selectedImage}}
+              source={{uri: imagen}}
               style={{
                 width: '100%',
                 height: '100%',
