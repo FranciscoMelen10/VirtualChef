@@ -6,6 +6,7 @@ import {
   View,
   ActivityIndicator,
 } from 'react-native';
+import Toast from 'react-native-toast-message';
 import {SafeAreaView} from 'react-native-safe-area-context';
 
 // Iconos
@@ -60,6 +61,7 @@ const Home = ({navigation}) => {
           icono={Iconos.Buscar}
         ></InputIcon>
 
+        <Toast />
         <View style={styles.principal}>
           <ScrollView>
             <CarruselComida

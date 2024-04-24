@@ -16,10 +16,11 @@ const ImgInput = () => {
       quality: 1,
     });
     if (!result.canceled) {
-      setImagen(result.assets[0].uri);
+      setImagen(result);
     }
   };
 
+  console.log('IMAGENNNNNNNNNNNNNNNN', imagen);
   return (
     <View style={styles.container}>
       <TouchableOpacity onPress={pickImage}>
@@ -27,7 +28,7 @@ const ImgInput = () => {
           <View style={styles.crossIconWrapper}>{Iconos.Cross}</View>
           {imagen && (
             <Image
-              source={{uri: imagen}}
+              source={{uri: imagen.assets[0].uri}}
               style={{
                 width: '100%',
                 height: '100%',

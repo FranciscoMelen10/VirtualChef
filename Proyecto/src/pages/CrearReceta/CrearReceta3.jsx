@@ -11,12 +11,13 @@ import {Button, TextInput} from 'react-native-paper';
 import InputAgregarElemento from '../../components/Inputs/InputAgregarElemento';
 import TarjetasAgregados from '../../components/TarjetasAgregados/TajetasAgregados';
 import {RecetaContext} from '../../contexts/recetaContext/recetaContext';
+import {Iconos} from '../../components/Icon/constante-svg';
 
 const CrearReceta3 = ({navigation}) => {
   const {receta, setReceta} = React.useContext(RecetaContext);
 
   const renderLink = () => {
-    if (receta.ingredientes.length >= 3) {
+    if (receta.pasos.length >= 3) {
       return (
         <Button
           title="Submit"
@@ -74,6 +75,12 @@ const CrearReceta3 = ({navigation}) => {
               })}
             </View>
 
+            <View style={{display: 'flex', flexDirection: 'row', gap: -60}}>
+              <View>{Iconos.CircleGreenLight}</View>
+              <View>{Iconos.CircleGreenLight}</View>
+              <View>{Iconos.CircleGreenDark}</View>
+              <View>{Iconos.CircleGreenLight}</View>
+            </View>
             {renderLink()}
           </View>
         </ScrollView>
@@ -104,7 +111,7 @@ const styles = StyleSheet.create({
     borderRadius: 24,
     width: 200,
     height: 50,
-    margin: 20,
+    marginBottom: 20,
   },
   buttonText: {
     color: '#fff',

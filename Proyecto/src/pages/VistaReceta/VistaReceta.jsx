@@ -8,6 +8,7 @@ import {
   Alert,
   ActivityIndicator,
 } from 'react-native';
+import Toast from 'react-native-toast-message';
 
 import {RecetaContext} from '../../contexts/recetaContext/recetaContext';
 import {useRecetas} from '../../hooks/Recetas';
@@ -16,6 +17,9 @@ import {usePasos} from '../../hooks/Pasos';
 import {getImagen} from '../../hooks/pocketbase';
 import {Iconos} from '../../components/Icon/constante-svg';
 import BotonRetroceder from '../../components/Buttons/BtnRetroceder';
+import {UserContext} from '../../contexts/userContext';
+import {existeUsuario} from '../../hooks/Usuarios';
+import {Button} from 'react-native-paper';
 
 /**
  * Component for displaying a recipe.
@@ -25,15 +29,21 @@ import BotonRetroceder from '../../components/Buttons/BtnRetroceder';
  * @returns {JSX.Element} The rendered recipe component.
  */
 function VistaReceta({navigation, route}) {
-  const {receta: recetaContext, setReceta: setRecetaContext} =
-    useContext(RecetaContext);
+  const {
+    receta: recetaContext,
+    setReceta: setRecetaContext,
+    imagen: imagenContext,
+    setImagen: setImagenContext,
+  } = useContext(RecetaContext);
+  const {user} = useContext(UserContext);
   const {searchReceta, createNewReceta} = useRecetas();
   const {getIngredientes, createNewIngrediente} = useIngredientes();
   const {getPasos, createNewPaso} = usePasos();
-  const id = route.params.id;
+  const id = route.params?.id ? route.params.id : null;
   const [receta, setReceta] = React.useState([]);
   const [ingredientes, setIngredientes] = React.useState([]);
   const [pasos, setPasos] = React.useState([]);
+  const [userData, setUserData] = React.useState({});
   const [loading, setLoading] = React.useState(true);
   // INCLUIR EL USUARIO CUANDO ESTÉ DISPONIBLE
 
@@ -43,13 +53,21 @@ function VistaReceta({navigation, route}) {
   useEffect(() => {
     // IMPLEMENTAR OBTENER EL USER AQUI
 
+    const fetchUser = async () => {
+      const respondUser = await existeUsuario('', '', user.id);
+      setUserData(respondUser[0]);
+      setLoading(false);
+    };
+
+    fetchUser();
+
     if (idIsEmpty) return;
 
     const fetchReceta = async () => {
       try {
         const respondReceta = await searchReceta(id);
         setReceta(respondReceta);
-        console.log('respond receta', respondReceta);
+        console.log('receta', receta);
         const respondIngredientes = await getIngredientes(id);
         setIngredientes(respondIngredientes);
         console.log('respond ingrediente', respondIngredientes);
@@ -70,9 +88,58 @@ function VistaReceta({navigation, route}) {
 
   const {collectionId, id: recordId, nombre, descripcion, imagen} = receta;
 
+  const creador = loading
+    ? 'Cargando'
+    : receta.expand?.creador.nombre +
+        ' ' +
+        receta.expand?.creador.apellido +
+        '(' +
+        receta.expand?.creador.username +
+        ')' || 'Anónimo';
+
+  console.log('receta', receta);
+
   const urlImagen = getImagen(receta);
 
   console.log(urlImagen);
+
+  const handleCrearReceta = async () => {
+    try {
+      imagenContext.assets[0].fileName = recetaContext.nombre;
+      const receta = await createNewReceta(recetaContext, imagenContext);
+
+      for (let i = 0; i < recetaContext.ingredientes.length; i++) {
+        await createNewIngrediente({
+          nombre: recetaContext.ingredientes[i],
+          recetasId: receta.id,
+        });
+      }
+
+      for (let i = 0; i < recetaContext.pasos.length; i++) {
+        await createNewPaso({
+          nombre: recetaContext.pasos[i],
+          recetaId: receta.id,
+        });
+      }
+
+      Toast.show({
+        type: 'success',
+        text1: 'Receta creada con exito',
+        text2: `${recetaContext.nombre} ha sido creada con exito!`,
+      });
+    } catch (error) {
+      console.log(error);
+      Toast.show({
+        type: 'error',
+        text1: 'Error al crear la receta',
+        text2: `No fue posible crear la receta.`,
+      });
+    }
+    console.log(receta);
+
+    navigation.navigate('Home');
+  };
+
   const renderIngredientes = () =>
     ingredientes.map((ingrediente, index) => {
       return (
@@ -95,51 +162,99 @@ function VistaReceta({navigation, route}) {
       );
     });
 
+  console.log('imagen', imagenContext);
+
   const renderVistaReceta = (contextIsEmpty, idIsEmpty) => {
     if (!contextIsEmpty && idIsEmpty) {
       return (
         <ScrollView>
           <View style={styles.container}>
             <View style={styles.panelImg}>
-              <Image style={styles.img} src={urlImagen} />
+              <View style={styles.goBackIconWrappper}>
+                <BotonRetroceder />
+              </View>
+
+              <Image style={styles.img} src={imagenContext.assets[0].uri} />
+              <View style={styles.favoriteIconWrappper}>{Iconos.Corazon}</View>
             </View>
             <View style={styles.panelDetails}>
               <View style={styles.recipeNameAndControlsWrapper}>
-                <View style={styles.favoriteIconWrappper}>
-                  {Iconos.Corazon}
-                </View>
-                <Text style={styles.recipeName}>{nombre}</Text>
+                <Text style={styles.recipeName}>{recetaContext.nombre}</Text>
               </View>
               <View>
-                <Text style={{textAlign: 'center', marginBottom: 10}}>
-                  {descripcion}
+                <Text style={styles.recipeDescrption}>
+                  {recetaContext.descripcion}
                 </Text>
               </View>
               <View>
                 <Text style={styles.detailsHeader}>Ingredientes</Text>
                 <View style={styles.list}>
-                  {ingredientes.map((ingrediente, index) => (
-                    <Text key={index} style={styles.listElementsStyle}>
-                      {ingrediente}
-                    </Text>
+                  {recetaContext.ingredientes?.map((ingrediente, index) => (
+                    <View key={index} style={styles.listElementsStyle}>
+                      <Text style={styles.listText}>
+                        {index + 1}- {ingrediente}
+                      </Text>
+                    </View>
                   ))}
                 </View>
               </View>
               <View>
                 <Text style={styles.detailsHeader}>Preparacion</Text>
                 <View style={styles.list}>
-                  {pasos.map((paso, index) => (
-                    <Text key={index} style={styles.listElementsStyle}>
-                      {paso}
-                    </Text>
+                  {recetaContext.pasos?.map((paso, index) => (
+                    <View key={index} style={styles.listElementsStyle}>
+                      <Text style={styles.listText}>
+                        {index + 1}- {paso}
+                      </Text>
+                    </View>
                   ))}
                 </View>
               </View>
               <View>
                 <Text style={{textAlign: 'center', padding: 10}}>
-                  {/* <Text style={{fontWeight: 600}}> Elaborado por:</Text> {autor} */}
+                  <Text style={{fontWeight: 600}}>
+                    {loading
+                      ? 'Cargando...'
+                      : userData.nombre +
+                          ' ' +
+                          userData.apellido +
+                          '(' +
+                          userData.username +
+                          ')' || 'Anónimo'}
+                  </Text>
                 </Text>
               </View>
+            </View>
+            <View
+              style={{
+                borderWidth: 1,
+                borderColor: 'black',
+                width: '100%',
+                height: 150,
+                position: 'absolute',
+                bottom: 0,
+                backgroundColor: 'white',
+                borderRadius: 24,
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+              }}
+            >
+              <View style={{display: 'flex', flexDirection: 'row', gap: -60}}>
+                <View>{Iconos.CircleGreenLight}</View>
+                <View>{Iconos.CircleGreenLight}</View>
+                <View>{Iconos.CircleGreenLight}</View>
+                <View>{Iconos.CircleGreenDark}</View>
+              </View>
+              <Button
+                title="Submit"
+                style={styles.buttonContainer}
+                onPress={() => {
+                  handleCrearReceta();
+                }}
+              >
+                <Text style={styles.buttonText}>Crear Receta</Text>
+              </Button>
             </View>
           </View>
         </ScrollView>
@@ -173,7 +288,9 @@ function VistaReceta({navigation, route}) {
               </View>
               <View>
                 <Text style={{textAlign: 'center', padding: 10}}>
-                  {/* <Text style={{fontWeight: 600}}> Elaborado por:</Text> {autor} */}
+                  <Text style={{fontWeight: 600}}>
+                    {loading ? <Text>Cargando</Text> : creador}
+                  </Text>
                 </Text>
               </View>
             </View>
@@ -202,7 +319,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     flexDirection: 'row',
-    marginTop: 40,
+    marginTop: 70,
   },
 
   img: {
@@ -217,6 +334,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     width: '100%',
     borderRadius: 20,
+    paddingBottom: 150,
   },
 
   recipeName: {
@@ -290,6 +408,21 @@ const styles = StyleSheet.create({
     zIndex: 10,
     left: 0,
     marginLeft: 10,
+  },
+  buttonContainer: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: '#246C2C',
+    borderRadius: 24,
+    width: 200,
+    height: 50,
+    marginTop: -30,
+    marginBottom: 20,
+  },
+  buttonText: {
+    color: '#fff',
+    fontWeight: 'bold',
+    fontSize: 20,
   },
 });
 

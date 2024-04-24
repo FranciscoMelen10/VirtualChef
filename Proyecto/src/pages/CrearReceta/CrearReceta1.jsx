@@ -10,6 +10,7 @@ import ImgInput from '../../components/ImgInput/ImgInput';
 import BtnFuntion from '../../components/Buttons/BtnFuntion';
 import ControladorPasos from '../../components/ControladorPasos/ControladorPasos';
 import {Iconos} from '../../components/Icon/constante-svg';
+import {UserContext} from '../../contexts/userContext';
 
 const CrearReceta1 = ({navigation}) => {
   const {
@@ -20,6 +21,7 @@ const CrearReceta1 = ({navigation}) => {
 
   // FALTA IMPLEMENTAR EL ID DEL USUARIO Y LA SELECCION DE HORARIOS DE COMIDA
   const {receta, setReceta, imagen} = React.useContext(RecetaContext);
+  const {user} = React.useContext(UserContext);
   const horariosComida = ['Desayuno', 'Almuerzo', 'Cena'];
 
   const pickHorarioId = (horario) => {
@@ -39,15 +41,14 @@ const CrearReceta1 = ({navigation}) => {
     setReceta({
       nombre: data.nombre,
       descripcion: data.descripcion,
-      // creador: userId,
-      imagen: imagen,
+      creador: user.id,
       tiempoPreparacion: data.tiempoPreparacion,
       horarioId: pickHorarioId(data.horarioComida),
       ingredientes: [],
       pasos: [],
     });
-    console.log(data);
-    console.log(receta);
+    console.log('data', data);
+    console.log('receta context', receta);
   };
 
   const renderLink = () => {
