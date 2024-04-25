@@ -7,6 +7,7 @@ import Logo from '../../../assets/Logo.svg';
 import Buscar from '../../../assets/Buscar.svg';
 import Reloj from '../../../assets/Reloj.svg';
 import Corazon from '../../../assets/Corazon.svg';
+import BackClaro from '../../../assets/BackClaro.svg';
 import PopUpMenuIcon from '../../../assets/PopUpMenuIcon.svg';
 import Cross from '../../../assets/Cross.svg';
 import CircleGreenDark from '../../../assets/CircleGreenDark.svg';
@@ -23,6 +24,7 @@ export const Iconos = {
   Buscar: <Buscar width={20} height={20} />,
   Reloj: <Reloj width={12} height={12} />,
   Corazon: <Corazon width={25} height={25} />,
+  BackClaro: <BackClaro width={25} height={25} />,
   PopUpMenuIcon: <PopUpMenuIcon width={25} height={25} />,
   Cross: <Cross width={100} height={100} />,
   CircleGreenDark: <CircleGreenDark width={110} height={110} />,

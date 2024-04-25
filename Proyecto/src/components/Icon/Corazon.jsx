@@ -7,6 +7,7 @@ import {
   guardarFavorito,
 } from '../../hooks/Favoritos';
 import {UserContext} from '../../contexts/userContext';
+import Toast from 'react-native-toast-message';
 
 const Corazon = ({id_receta}) => {
   const fadeAnim = useRef(new Animated.Value(0)).current;
@@ -28,6 +29,13 @@ const Corazon = ({id_receta}) => {
 
   const handlePress = async () => {
     if (selected) {
+      Toast.show({
+        type: 'error',
+        text1: 'Receta eliminada de Favoritos',
+        text2: 'Se ha eliminado esta receta en las sección de favoritos',
+        position: 'top',
+        visibilityTime: 2000,
+      });
       await eliminarFavorito(user.id, id_receta);
       Animated.timing(fadeAnim, {
         toValue: 1,
@@ -35,6 +43,13 @@ const Corazon = ({id_receta}) => {
         useNativeDriver: true,
       }).start();
     } else {
+      Toast.show({
+        type: 'success',
+        text1: 'Receta agregada a Favoritos',
+        text2: 'Se ha guardado esta receta en las sección de favoritos',
+        position: 'top',
+        visibilityTime: 2000,
+      });
       await guardarFavorito(user.id, id_receta);
       Animated.timing(fadeAnim, {
         toValue: 1,

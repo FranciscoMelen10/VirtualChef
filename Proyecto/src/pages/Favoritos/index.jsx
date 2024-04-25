@@ -1,20 +1,20 @@
 import React, {useContext, useEffect, useState} from 'react';
-import {StyleSheet, FlatList, Dimensions, View} from 'react-native';
+import {StyleSheet, FlatList, View, Text} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
+import {ActivityIndicator} from 'react-native-paper';
 
-import {Iconos} from '../../components/Icon/constante-svg';
-import InputIcon from '../../components/Inputs/InputIcon';
+// Componentes
 import CardFavoritos from '../../components/Cards/CardFavoritos';
 
-import Ejemplo from '../../../assets/Ejemplo.png';
-import Ejemplo2 from '../../../assets/Ejemplo2.png';
-import Ejemplo3 from '../../../assets/Ejemplo3.png';
-import {getFavoritos} from '../../hooks/Favoritos';
-import {UserContext} from '../../contexts/userContext';
-import { ActivityIndicator } from 'react-native-paper';
-import { getImagen } from '../../hooks/pocketbase';
+// Imagenes
+import {Iconos} from '../../components/Icon/constante-svg';
 
-const WIDTH_WINDOW = Dimensions.get('window').height;
+// Hooks
+import {getFavoritos} from '../../hooks/Favoritos';
+import {getImagen} from '../../hooks/pocketbase';
+
+// Contextos
+import {UserContext} from '../../contexts/userContext';
 
 function Favoritos() {
   const {user} = useContext(UserContext);
@@ -26,7 +26,7 @@ function Favoritos() {
     const Favoritos = async () => {
       try {
         setFavoritos(await getFavoritos(user.id));
-        
+
         //Cuando cargue todo, se mostrara el contenido
         setIsLoading(false);
       } catch (error) {
@@ -39,26 +39,47 @@ function Favoritos() {
   if (!isLoading) {
     return (
       <SafeAreaView style={styles.contenedor_principal}>
-        <InputIcon
-          icono={Iconos.Buscar}
-          placeholder={'Buscar en favoritos...'}
-        />
-        <FlatList
-          contentContainerStyle={styles.container}
-          data={favoritos}
-          renderItem={({item, index}) => (
-                <CardFavoritos
-                  img={getImagen(item.expand.recetasId)}
-                  name={item.expand.recetasId.nombre}
-                  time={item.expand.recetasId.tiempoPreparacion}
-                  id={item.expand.recetasId.id}
-                  key={index}
-                />
-          )}
-          numColumns={2}
-          keyExtractor={(item) => item.id }
-
-        />
+        <Text
+          style={{
+            textAlign: 'center',
+            fontSize: 30,
+            fontWeight: '600',
+            paddingBottom: 10,
+          }}
+        >
+          Favoritos
+        </Text>
+        {favoritos.length > 0 ? (
+          <FlatList
+            contentContainerStyle={styles.container}
+            data={favoritos}
+            renderItem={({item, index}) => (
+              <CardFavoritos
+                img={getImagen(item.expand.recetasId)}
+                name={item.expand.recetasId.nombre}
+                time={item.expand.recetasId.tiempoPreparacion}
+                id={item.expand.recetasId.id}
+                key={index}
+              />
+            )}
+            numColumns={2}
+            keyExtractor={(item) => item.id}
+            showsVerticalScrollIndicator={false}
+          />
+        ) : (
+          <View style={styles.noEncontrado}>
+            {Iconos.LogoXL}
+            <Text
+              style={{
+                textAlign: 'center',
+                fontSize: 20,
+                fontWeight: '300',
+              }}
+            >
+              No tienes recetas favoritas
+            </Text>
+          </View>
+        )}
       </SafeAreaView>
     );
   } else {
@@ -74,6 +95,7 @@ const styles = StyleSheet.create({
   contenedor_principal: {
     flex: 1,
     padding: 20,
+    backgroundColor:'white'
   },
   container: {
     justifyContent: 'center',
@@ -82,6 +104,12 @@ const styles = StyleSheet.create({
   centeredContent: {
     alignItems: 'center',
   },
+  noEncontrado:{
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    gap:20
+  }
 });
 
 export default Favoritos;

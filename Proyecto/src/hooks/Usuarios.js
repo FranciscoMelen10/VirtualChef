@@ -1,4 +1,5 @@
 import PocketBase from 'pocketbase';
+import Toast from 'react-native-toast-message';
 
 const pb = new PocketBase('https://virtualchef.pockethost.io');
 
@@ -26,24 +27,33 @@ async function createUser(data) {
       apellido: data.apellido,
       rolID: idRol[0].id, // ID del rol de usuario
     };
-    console.log(datos);
 
     // Comprueba si hay un usuario con el mismo correo o nombre de usuario
     const user = await existeUsuario(datos.email, datos.username);
 
     // la varible "user" es un arreglo con los usuarios que coinciden con el correo o nombre de usuario
     if (user.length === 1) {
-      alert('Usuario ya existe, intente con otro correo o nombre de usuario');
+      Toast.show({
+        type: 'error',
+        text1: 'Error de registro de sesión',
+        text2: 'Usuario ya existe, intente con otro correo o nombre de usuario',
+        position: 'top',
+      }); 
     } else {
       // Crea el usuario, porque no existe
       console.log('Creando usuario...');
       await pb.collection('users').create(datos);
-      alert('Usuario creado con exito');
+      Toast.show({
+        type: 'success',
+        text1: 'Usuario creado exitosamente',
+        text2: 'Se ha creado con exito al usuario, Bienvenido ' + datos.username,
+        position: 'top',
+      }); 
     }
 
     return user;
   } catch (error) {
-    alert(error);
+    console.log(error);
   }
 }
 
@@ -56,7 +66,13 @@ async function loginUsuario(email, password) {
     return authData;
   } catch (error) {
     console.log(error);
-    alert('Usuario no encontrado, intente de nuevo');
+    Toast.show({
+      type: 'error',
+      text1: 'Error de inicio de sesión',
+      text2: 'El correo y contraseña no son correctos, intente nuevamente.',
+      position: 'top',
+      visibilityTime: 2000,
+    }); 
     return false;
   }
 }
