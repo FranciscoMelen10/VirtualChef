@@ -239,7 +239,7 @@ function Perfil({navigation}) {
                 {userInfo[0].nombre + ' ' + userInfo[0].apellido}
               </Text>
               <Text style={{fontSize: 16}}>{userInfo[0].email}</Text>
-              {renderEditar()}
+              {/* {renderEditar()} */}
             </View>
 
             <View
