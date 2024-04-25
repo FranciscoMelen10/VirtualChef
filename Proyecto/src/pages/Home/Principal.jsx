@@ -5,6 +5,8 @@ import {
   Dimensions,
   View,
   ActivityIndicator,
+  TouchableOpacity,
+  TextInput
 } from 'react-native';
 import Toast from 'react-native-toast-message';
 import {SafeAreaView} from 'react-native-safe-area-context';
@@ -33,8 +35,19 @@ const Home = ({navigation}) => {
   const [Desayunos, setDesayunos] = useState([]);
   const [Almuerzos, setAlmuerzos] = useState([]);
   const [Cenas, setCenas] = useState([]);
+  const [searchValue, setSearchValue] = useState('');
   const [isLoading, setIsLoading] = useState(true);
 
+  const handleInputChange = (text) => {
+    setSearchValue(text);
+  };
+
+  const handleSearch = () => {
+    navigation.navigate('Buscar', {
+      id: searchValue,
+    });
+  };
+  
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -57,8 +70,11 @@ const Home = ({navigation}) => {
     return (
       <SafeAreaView style={styles.container}>
         <InputIcon
-          placeholder={'Buscar recetas...'}
-          icono={Iconos.Buscar}
+          placeholder={"Buscar recetas"}
+          onChangeText={handleInputChange}
+          value={searchValue}
+          onPress={handleSearch}
+          icon={Iconos.Buscar}
         ></InputIcon>
 
         <Toast />

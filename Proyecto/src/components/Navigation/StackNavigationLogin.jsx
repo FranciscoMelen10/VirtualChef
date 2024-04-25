@@ -11,6 +11,7 @@ import CrearReceta1 from '../../pages/CrearReceta/CrearReceta1';
 import CrearReceta2 from '../../pages/CrearReceta/CrearReceta2';
 import CrearReceta3 from '../../pages/CrearReceta/CrearReceta3';
 import {UserProvider} from '../../contexts/userContext';
+import BuscarRecetas from '../../pages/Buscar/index'
 
 const Stack = createNativeStackNavigator();
 
@@ -53,6 +54,11 @@ export function MyStackLogin() {
             <Stack.Screen
               name="CrearReceta3"
               component={CrearReceta3}
+              options={{headerShown: false}}
+            />
+            <Stack.Screen
+              name="Buscar"
+              component={BuscarRecetas}
               options={{headerShown: false}}
             />
           </Stack.Navigator>
