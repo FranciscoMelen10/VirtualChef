@@ -1,6 +1,9 @@
+import PocketBase from 'pocketbase';
 
-function getImagen({ collectionId, id, imagen }) {
-    return `https://virtualchef.pockethost.io/api/files/${collectionId}/${id}/${imagen}`
-  }
-  
-  export { getImagen };
+const pb = new PocketBase('https://virtualchef.pockethost.io');
+
+function getImagen({collectionId, id, imagen}) {
+  return `https://virtualchef.pockethost.io/api/files/${collectionId}/${id}/${imagen}`;
+}
+
+export {getImagen, pb};

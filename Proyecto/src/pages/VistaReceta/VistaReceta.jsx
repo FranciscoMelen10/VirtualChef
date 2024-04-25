@@ -1,7 +1,25 @@
-import React from 'react';
-import {View, StyleSheet, Text, Image, ScrollView} from 'react-native';
-import PopupMenu from '../../components/Popup-menu/Popup-menu';
+import React, {useContext, useEffect} from 'react';
+import {
+  View,
+  StyleSheet,
+  Text,
+  Image,
+  ScrollView,
+  Alert,
+  ActivityIndicator,
+} from 'react-native';
+import Toast from 'react-native-toast-message';
+
+import {RecetaContext} from '../../contexts/recetaContext/recetaContext';
+import {useRecetas} from '../../hooks/Recetas';
+import {useIngredientes} from '../../hooks/Ingredientes';
+import {usePasos} from '../../hooks/Pasos';
+import {getImagen} from '../../hooks/pocketbase';
 import {Iconos} from '../../components/Icon/constante-svg';
+import BotonRetroceder from '../../components/Buttons/BtnRetroceder';
+import {UserContext} from '../../contexts/userContext';
+import {existeUsuario} from '../../hooks/Usuarios';
+import {Button} from 'react-native-paper';
 
 /**
  * Component for displaying a recipe.
@@ -10,77 +28,279 @@ import {Iconos} from '../../components/Icon/constante-svg';
  * @param {boolean} isFavorite - Indicates if the recipe is marked as favorite.
  * @returns {JSX.Element} The rendered recipe component.
  */
-function VistaReceta({recipeData, isUsersRecipe, isFavorite}) {
+function VistaReceta({navigation, route}) {
   const {
-    nombre,
-    descripcion,
-    ingredientes = [],
-    pasos = [],
-    autor,
-    imgLink,
-  } = {recipeData};
+    receta: recetaContext,
+    setReceta: setRecetaContext,
+    imagen: imagenContext,
+    setImagen: setImagenContext,
+  } = useContext(RecetaContext);
+  const {user} = useContext(UserContext);
+  const {searchReceta, createNewReceta} = useRecetas();
+  const {getIngredientes, createNewIngrediente} = useIngredientes();
+  const {getPasos, createNewPaso} = usePasos();
+  const id = route.params?.id ? route.params.id : null;
+  const [receta, setReceta] = React.useState([]);
+  const [ingredientes, setIngredientes] = React.useState([]);
+  const [pasos, setPasos] = React.useState([]);
+  const [userData, setUserData] = React.useState({});
+  const [loading, setLoading] = React.useState(true);
+  // INCLUIR EL USUARIO CUANDO ESTÉ DISPONIBLE
 
-  /**
-   * Renders the user controls if the recipe belongs to the current user.
-   * @returns {JSX.Element|null} The rendered user controls or null if the recipe doesn't belong to the current user.
-   */
-  const renderUserControls = () => {
-    if (isUsersRecipe === true) {
-      return (
-        <View style={styles.popUpMenuWrapper}>
-          <PopupMenu />
-        </View>
-      );
+  const idIsEmpty = id === undefined || id === null || id === '';
+  const contextIsEmpty = recetaContext == {} ? true : false;
+
+  useEffect(() => {
+    // IMPLEMENTAR OBTENER EL USER AQUI
+
+    const fetchUser = async () => {
+      const respondUser = await existeUsuario('', '', user.id);
+      setUserData(respondUser[0]);
+      setLoading(false);
+    };
+
+    fetchUser();
+
+    if (idIsEmpty) return;
+
+    const fetchReceta = async () => {
+      try {
+        const respondReceta = await searchReceta(id);
+        setReceta(respondReceta);
+        console.log('receta', receta);
+        const respondIngredientes = await getIngredientes(id);
+        setIngredientes(respondIngredientes);
+        console.log('respond ingrediente', respondIngredientes);
+        const respondPasos = await getPasos(id);
+        setPasos(respondPasos);
+        console.log('respond pasos', respondPasos);
+        setLoading(false);
+      } catch (error) {
+        Alert(error);
+        setLoading(false);
+      }
+    };
+
+    console.log('id', id);
+
+    fetchReceta();
+  }, [id]);
+
+  const {collectionId, id: recordId, nombre, descripcion, imagen} = receta;
+
+  const creador = loading
+    ? 'Cargando'
+    : receta.expand?.creador.nombre +
+        ' ' +
+        receta.expand?.creador.apellido +
+        '(' +
+        receta.expand?.creador.username +
+        ')' || 'Anónimo';
+
+  console.log('receta', receta);
+
+  const urlImagen = getImagen(receta);
+
+  console.log(urlImagen);
+
+  const handleCrearReceta = async () => {
+    try {
+      imagenContext.assets[0].fileName = recetaContext.nombre;
+      const receta = await createNewReceta(recetaContext, imagenContext);
+
+      for (let i = 0; i < recetaContext.ingredientes.length; i++) {
+        await createNewIngrediente({
+          nombre: recetaContext.ingredientes[i],
+          recetasId: receta.id,
+        });
+      }
+
+      for (let i = 0; i < recetaContext.pasos.length; i++) {
+        await createNewPaso({
+          nombre: recetaContext.pasos[i],
+          recetaId: receta.id,
+        });
+      }
+
+      Toast.show({
+        type: 'success',
+        text1: 'Receta creada con exito',
+        text2: `${recetaContext.nombre} ha sido creada con exito!`,
+      });
+    } catch (error) {
+      console.log(error);
+      Toast.show({
+        type: 'error',
+        text1: 'Error al crear la receta',
+        text2: `No fue posible crear la receta.`,
+      });
     }
-    return null;
+    console.log(receta);
+
+    navigation.navigate('Home');
   };
 
-  return (
-    <ScrollView>
-      <View style={styles.container}>
-        <View style={styles.panelImg}>
-          <Image style={styles.img} source={imgLink}></Image>
+  const renderIngredientes = () =>
+    ingredientes.map((ingrediente, index) => {
+      return (
+        <View key={index} style={styles.listElementsStyle}>
+          <Text style={styles.listText}>
+            {index + 1}- {ingrediente.nombre}
+          </Text>
         </View>
-        <View style={styles.panelDetails}>
-          <View style={styles.recipeNameAndControlsWrapper}>
-            <View style={styles.favoriteIconWrappper}>{Iconos.Corazon}</View>
-            <Text style={styles.recipeName}>{nombre}</Text>
-            {renderUserControls()}
-          </View>
-          <View>
-            <Text style={{textAlign: 'center', marginBottom: 10}}>
-              {descripcion}
-            </Text>
-          </View>
-          <View>
-            <Text style={styles.detailsHeader}>Ingredientes</Text>
-            <View style={styles.list}>
-              {ingredientes.map((ingrediente, index) => (
-                <Text key={index} style={styles.listElementsStyle}>
-                  {ingrediente}
+      );
+    });
+
+  const renderPasos = () =>
+    pasos.map((paso, index) => {
+      return (
+        <View key={index} style={styles.listElementsStyle}>
+          <Text style={styles.listText}>
+            {index + 1}- {paso.nombre}
+          </Text>
+        </View>
+      );
+    });
+
+  console.log('imagen', imagenContext);
+
+  const renderVistaReceta = (contextIsEmpty, idIsEmpty) => {
+    if (!contextIsEmpty && idIsEmpty) {
+      return (
+        <ScrollView>
+          <View style={styles.container}>
+            <View style={styles.panelImg}>
+              <View style={styles.goBackIconWrappper}>
+                <BotonRetroceder />
+              </View>
+
+              <Image style={styles.img} src={imagenContext.assets[0].uri} />
+              <View style={styles.favoriteIconWrappper}>{Iconos.Corazon}</View>
+            </View>
+            <View style={styles.panelDetails}>
+              <View style={styles.recipeNameAndControlsWrapper}>
+                <Text style={styles.recipeName}>{recetaContext.nombre}</Text>
+              </View>
+              <View>
+                <Text style={styles.recipeDescrption}>
+                  {recetaContext.descripcion}
                 </Text>
-              ))}
+              </View>
+              <View>
+                <Text style={styles.detailsHeader}>Ingredientes</Text>
+                <View style={styles.list}>
+                  {recetaContext.ingredientes?.map((ingrediente, index) => (
+                    <View key={index} style={styles.listElementsStyle}>
+                      <Text style={styles.listText}>
+                        {index + 1}- {ingrediente}
+                      </Text>
+                    </View>
+                  ))}
+                </View>
+              </View>
+              <View>
+                <Text style={styles.detailsHeader}>Preparacion</Text>
+                <View style={styles.list}>
+                  {recetaContext.pasos?.map((paso, index) => (
+                    <View key={index} style={styles.listElementsStyle}>
+                      <Text style={styles.listText}>
+                        {index + 1}- {paso}
+                      </Text>
+                    </View>
+                  ))}
+                </View>
+              </View>
+              <View>
+                <Text style={{textAlign: 'center', padding: 10}}>
+                  <Text style={{fontWeight: 600}}>
+                    {loading
+                      ? 'Cargando...'
+                      : userData.nombre +
+                          ' ' +
+                          userData.apellido +
+                          '(' +
+                          userData.username +
+                          ')' || 'Anónimo'}
+                  </Text>
+                </Text>
+              </View>
+            </View>
+            <View
+              style={{
+                borderWidth: 1,
+                borderColor: 'black',
+                width: '100%',
+                height: 150,
+                position: 'absolute',
+                bottom: 0,
+                backgroundColor: 'white',
+                borderRadius: 24,
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+              }}
+            >
+              <View style={{display: 'flex', flexDirection: 'row', gap: -60}}>
+                <View>{Iconos.CircleGreenLight}</View>
+                <View>{Iconos.CircleGreenLight}</View>
+                <View>{Iconos.CircleGreenLight}</View>
+                <View>{Iconos.CircleGreenDark}</View>
+              </View>
+              <Button
+                title="Submit"
+                style={styles.buttonContainer}
+                onPress={() => {
+                  handleCrearReceta();
+                }}
+              >
+                <Text style={styles.buttonText}>Crear Receta</Text>
+              </Button>
             </View>
           </View>
-          <View>
-            <Text style={styles.detailsHeader}>Preparacion</Text>
-            <View style={styles.list}>
-              {pasos.map((paso, index) => (
-                <Text key={index} style={styles.listElementsStyle}>
-                  {paso}
+        </ScrollView>
+      );
+    } else {
+      return (
+        <ScrollView>
+          <View style={styles.container}>
+            <View style={styles.panelImg}>
+              <View style={styles.goBackIconWrappper}>
+                <BotonRetroceder />
+              </View>
+
+              <Image style={styles.img} src={urlImagen} />
+              <View style={styles.favoriteIconWrappper}>{Iconos.Corazon}</View>
+            </View>
+            <View style={styles.panelDetails}>
+              <View style={styles.recipeNameAndControlsWrapper}>
+                <Text style={styles.recipeName}>{nombre}</Text>
+              </View>
+              <View>
+                <Text style={styles.recipeDescrption}>{descripcion}</Text>
+              </View>
+              <View>
+                <Text style={styles.detailsHeader}>Ingredientes</Text>
+                <View style={styles.list}>{renderIngredientes()}</View>
+              </View>
+              <View>
+                <Text style={styles.detailsHeader}>Preparacion</Text>
+                <View style={styles.list}>{renderPasos()}</View>
+              </View>
+              <View>
+                <Text style={{textAlign: 'center', padding: 10}}>
+                  <Text style={{fontWeight: 600}}>
+                    {loading ? <Text>Cargando</Text> : creador}
+                  </Text>
                 </Text>
-              ))}
+              </View>
             </View>
           </View>
-          <View>
-            <Text style={{textAlign: 'center', padding: 10, fontSize: 16}}>
-              <Text style={{fontWeight: 600}}> Elaborado por:</Text> {autor}
-            </Text>
-          </View>
-        </View>
-      </View>
-    </ScrollView>
-  );
+        </ScrollView>
+      );
+    }
+  };
+
+  return <>{renderVistaReceta(contextIsEmpty, idIsEmpty)}</>;
 }
 
 const styles = StyleSheet.create({
@@ -96,14 +316,17 @@ const styles = StyleSheet.create({
   panelImg: {
     width: '100%',
     display: 'flex',
-    justifyContent: 'flex-end',
+    justifyContent: 'center',
     alignItems: 'center',
-    marginTop: 40,
+    flexDirection: 'row',
+    marginTop: 70,
   },
 
   img: {
-    width: 300,
-    borderRadius: 10,
+    width: 200,
+    height: 200,
+    objectFit: 'cover',
+    borderRadius: 16,
     shadowColor: '#000',
   },
 
@@ -111,6 +334,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     width: '100%',
     borderRadius: 20,
+    paddingBottom: 150,
   },
 
   recipeName: {
@@ -119,6 +343,13 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     padding: 20,
     marginLeft: 15,
+  },
+
+  recipeDescrption: {
+    textAlign: 'center',
+    marginBottom: 10,
+    fontSize: 17,
+    fontStyle: 'italic',
   },
 
   detailsHeader: {
@@ -147,6 +378,10 @@ const styles = StyleSheet.create({
     shadowColor: '#000',
   },
 
+  listText: {
+    fontSize: 16,
+  },
+
   recipeNameAndControlsWrapper: {
     display: 'flex',
     justifyContent: 'center',
@@ -157,9 +392,37 @@ const styles = StyleSheet.create({
   popUpMenuWrapper: {position: 'absolute', zIndex: 10, right: -40},
 
   favoriteIconWrappper: {
+    backgroundColor: '#fff',
+    borderRadius: 6,
+    alignSelf: 'flex-start',
     position: 'absolute',
     zIndex: 10,
-    left: 20,
+    right: 0,
+    marginRight: 10,
+    padding: 5,
+  },
+  goBackIconWrappper: {
+    alignSelf: 'flex-start',
+    position: 'absolute',
+    position: 'absolute',
+    zIndex: 10,
+    left: 0,
+    marginLeft: 10,
+  },
+  buttonContainer: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: '#246C2C',
+    borderRadius: 24,
+    width: 200,
+    height: 50,
+    marginTop: -30,
+    marginBottom: 20,
+  },
+  buttonText: {
+    color: '#fff',
+    fontWeight: 'bold',
+    fontSize: 20,
   },
 });
 

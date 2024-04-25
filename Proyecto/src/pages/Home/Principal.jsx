@@ -1,64 +1,122 @@
-import React, { useEffect, useState } from 'react';
-import { StyleSheet, ScrollView, Dimensions, View } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import axios from 'axios';
-import CarruselComida from '../../components/Carrusel/CarruselComidas';
-import { Iconos } from '../../components/Icon/constante-svg';
+import React, {useContext, useEffect, useState} from 'react';
+import {
+  StyleSheet,
+  ScrollView,
+  Dimensions,
+  View,
+  ActivityIndicator,
+  TouchableOpacity,
+  TextInput
+} from 'react-native';
+import Toast from 'react-native-toast-message';
+import {SafeAreaView} from 'react-native-safe-area-context';
+
+// Iconos
+import {Iconos} from '../../components/Icon/constante-svg';
+
+// Componentes
 import InputIcon from '../../components/Inputs/InputIcon';
 import BtnPop from '../../components/Buttons/BtnPop';
+import CarruselComida from '../../components/Carrusel/CarruselComidas';
+
+// Contextos
+import {useRecetas} from '../../hooks/Recetas';
+import {UserContext} from '../../contexts/userContext';
 
 const WIDTH_WINDOW = Dimensions.get('window').width;
+const HEIGHT_WINDOW = Dimensions.get('window').height;
 
-const Home = () => {
-  const [recetas, setRecetas] = useState([]);
+const Home = ({navigation}) => {
+  const {user} = useContext(UserContext);
 
+  // useState para obtener las recetas
+  const {getRecetasMenu} = useRecetas();
+  // useState para guardar las recetas de desayuno, almuerzo y cena
+  const [Desayunos, setDesayunos] = useState([]);
+  const [Almuerzos, setAlmuerzos] = useState([]);
+  const [Cenas, setCenas] = useState([]);
+  const [searchValue, setSearchValue] = useState('');
+  const [isLoading, setIsLoading] = useState(true);
+
+  const handleInputChange = (text) => {
+    setSearchValue(text);
+  };
+
+  const handleSearch = () => {
+    navigation.navigate('Buscar', {
+      id: searchValue,
+    });
+  };
+  
   useEffect(() => {
     const fetchData = async () => {
       try {
-        // Agrega un retardo de 1 segundo antes de realizar la solicitud
-        await new Promise(resolve => setTimeout(resolve, 2000));
-        const response = await axios.get('https://virtualchef.pockethost.io/api/collections/recetas/records');
-        setRecetas(response.data.items);
+        // Fetch data from API
+        setDesayunos(await getRecetasMenu('Desayuno'));
+        setAlmuerzos(await getRecetasMenu('Almuerzo'));
+        setCenas(await getRecetasMenu('Cena'));
+
+        //Cuando cargue todo, se mostrara el contenido
+        setIsLoading(false);
       } catch (error) {
         console.log(error);
       }
     };
 
     fetchData();
-  }, [recetas]);
+  }, []);
 
-  return (
-    <SafeAreaView style={styles.container}>
-      <InputIcon
-        placeholder={'Buscar recetas...'}
-        icono={Iconos.Buscar}
-      ></InputIcon>
+  if (!isLoading) {
+    return (
+      <SafeAreaView style={styles.container}>
+        <InputIcon
+          placeholder={"Buscar recetas"}
+          onChangeText={handleInputChange}
+          value={searchValue}
+          onPress={handleSearch}
+          icon={Iconos.Buscar}
+        ></InputIcon>
 
-      <View style={styles.principal}>
-        <ScrollView>
+        <Toast />
+        <View style={styles.principal}>
+          <ScrollView>
+            <CarruselComida
+              navigation={navigation}
+              datos={Desayunos}
+              horario={'Desayuno'}
+            ></CarruselComida>
 
-          <CarruselComida
-            datos={recetas}
-            horario={'Desayuno'}
-          ></CarruselComida>
+            <CarruselComida
+              navigation={navigation}
+              datos={Almuerzos}
+              horario={'Almuerzo'}
+            ></CarruselComida>
 
-          <CarruselComida
-            datos={recetas}
-            horario={'Almuerzo'}
-          ></CarruselComida>
-          
-          <CarruselComida
-            datos={recetas}
-            horario={'Cena'}
-          ></CarruselComida>
-        </ScrollView>
+            <CarruselComida
+              navigation={navigation}
+              datos={Cenas}
+              horario={'Cena'}
+            ></CarruselComida>
+          </ScrollView>
+        </View>
+
+        <View style={styles.button}>
+          <BtnPop
+            onPress={() => {
+              navigation.navigate('CrearReceta1');
+            }}
+            icon={Iconos.CrearRecetas}
+          ></BtnPop>
+        </View>
+      </SafeAreaView>
+    );
+  } else {
+    return (
+      <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+        <ActivityIndicator size="large" color="#246C2C" />
       </View>
-
-      <View style={styles.button}>
-        <BtnPop icon={Iconos.CrearRecetas}></BtnPop>
-      </View>
-    </SafeAreaView>
-  );
+    );
+  }
 };
 
 const styles = StyleSheet.create({
@@ -73,11 +131,11 @@ const styles = StyleSheet.create({
     flex: 1,
     width: WIDTH_WINDOW,
   },
-  button:{
+  button: {
     position: 'absolute',
     bottom: 10,
     right: 10,
-  }
+  },
 });
 
 export default Home;

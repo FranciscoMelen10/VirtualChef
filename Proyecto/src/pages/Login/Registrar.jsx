@@ -7,6 +7,7 @@ import Input from '../../components/Inputs/Input';
 import {Text} from 'react-native';
 import {Button} from 'react-native-paper';
 import {createUser} from '../../hooks/Usuarios';
+import Toast from 'react-native-toast-message';
 
 const HEIGHT_WINDOW = Dimensions.get('window').height;
 
@@ -19,16 +20,21 @@ export default function Registrar({navigation}) {
 
   const onSubmit = async (data) => {
     if (data.contraseña !== data.confirmar_contraseña) {
-      alert('Las contraseñas no coinciden');
+      Toast.show({
+        type: 'error',
+        text1: 'Error de registro de sesión',
+        text2: 'Las contraseñas no coinciden',
+        position: 'top',
+      });
       return;
     }
     createUser(data);
-    navigation.navigate('Login');
   };
 
   return (
     <ScrollView style={styles.scrollCont}>
       <View style={styles.contenedor_principal}>
+        <Toast />
         {Iconos.LogoXL}
         <View style={styles.contenedor}>
           {/* Correo electronico */}
@@ -44,6 +50,7 @@ export default function Registrar({navigation}) {
                   onChangeText={onChange}
                   value={value}
                   name={'Correo electronico'}
+                  maxLength={60}
                 />
               </View>
             )}
@@ -68,6 +75,7 @@ export default function Registrar({navigation}) {
                   onChangeText={onChange}
                   value={value}
                   name={'Nombre'}
+                  maxLength={60}
                 />
               </View>
             )}
@@ -93,6 +101,7 @@ export default function Registrar({navigation}) {
                   value={value}
                   style={styles.input}
                   name={'Apellido'}
+                  maxLength={60}
                 />
               </View>
             )}
@@ -118,6 +127,7 @@ export default function Registrar({navigation}) {
                   value={value}
                   style={styles.input}
                   name={'Nombre de usuario'}
+                  maxLength={60}
                 />
               </View>
             )}
@@ -144,6 +154,7 @@ export default function Registrar({navigation}) {
                   style={styles.input}
                   name={'Contraseña'}
                   secureTextEntry={true}
+                  maxLength={60}
                 />
               </View>
             )}
@@ -170,6 +181,7 @@ export default function Registrar({navigation}) {
                   style={styles.input}
                   name={'Confirmar contraseña'}
                   secureTextEntry={true}
+                  maxLength={60}
                 />
               </View>
             )}
