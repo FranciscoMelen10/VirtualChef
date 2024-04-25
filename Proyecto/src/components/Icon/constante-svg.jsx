@@ -15,6 +15,7 @@ import CrearRecetas from '../../../assets/Create-pencil.svg';
 import Back from '../../../assets/Back.svg';
 import Plus from '../../../assets/Plus.svg';
 import Trash from '../../../assets/Trash.svg';
+import Profile from '../../../assets/Profile.svg';
 
 export const Iconos = {
   LogoXL: <Logo width={200} height={200} />,
@@ -30,4 +31,5 @@ export const Iconos = {
   Back: <Back width={25} height={25} />,
   Plus: <Plus width={25} height={25} />,
   Trash: <Trash width={25} height={25} />,
+  Profile: <Profile width={80} height={80} />,
 };
