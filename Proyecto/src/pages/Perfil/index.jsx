@@ -18,7 +18,7 @@ import {getImagen} from '../../hooks/pocketbase';
 import BtnFuntion from '../../components/Buttons/BtnFuntion';
 import Input from '../../components/Inputs/Input';
 
-function Perfil() {
+function Perfil({navigation}) {
   const {user, updateUser} = React.useContext(UserContext);
   const [userInfo, setUserInfo] = useState([{nombre: ''}]);
   const [recetas, setRecetas] = useState([]);
@@ -96,7 +96,13 @@ function Perfil() {
   const renderEditar = () => {
     if (editarIsActivated) {
       return (
-        <View>
+        <View
+          style={{
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+          }}
+        >
           <Controller
             control={control}
             rules={{required: true}}
@@ -159,25 +165,6 @@ function Perfil() {
                 onChangeText={onChange}
                 value={value}
                 maxLength={50}
-                name="Correo"
-                keyboardType="email-address"
-                type="email"
-              />
-            )}
-            name="correo"
-          />
-          {errors.correo && (
-            <Text style={styles.errorMessa}>Ingresa un correo válido.</Text>
-          )}
-          <Controller
-            control={control}
-            rules={{required: true}}
-            render={({field: {onChange, onBlur, value}}) => (
-              <Input
-                onBlur={onBlur}
-                onChangeText={onChange}
-                value={value}
-                maxLength={50}
                 name="Conntraseña nueva"
                 keyboardType="default"
                 type="password"
@@ -211,6 +198,26 @@ function Perfil() {
               Ingresa una contraseña válida.
             </Text>
           )}
+
+          <View style={{marginTop: 20}}>
+            <BtnFuntion
+              name={'Guardar cambios'}
+              funtionClick={() => {
+                handleSubmit(onSubmit);
+              }}
+            />
+          </View>
+        </View>
+      );
+    } else {
+      return (
+        <View style={{marginTop: 20}}>
+          <BtnFuntion
+            name={'Editar usuario'}
+            funtionClick={() => {
+              setEditarIsActivated(true);
+            }}
+          />
         </View>
       );
     }
@@ -232,17 +239,7 @@ function Perfil() {
                 {userInfo[0].nombre + ' ' + userInfo[0].apellido}
               </Text>
               <Text style={{fontSize: 16}}>{userInfo[0].email}</Text>
-
-              <View style={{marginTop: 20}}>
-                <BtnFuntion
-                  name={'Editar usuario'}
-                  funtionClick={() => {
-                    setEditarIsActivated(true);
-                  }}
-                />
-              </View>
-
-              <View style={{marginTop: 0}}>{renderEditar()}</View>
+              {renderEditar()}
             </View>
 
             <View
@@ -263,6 +260,7 @@ function Perfil() {
                   return (
                     <View key={index} style={{marginVertical: 10}}>
                       <CardComidas
+                        navigation={navigation}
                         name={receta.nombre}
                         time={receta.tiempoPreparacion}
                         imagen={getImagen(receta)}
