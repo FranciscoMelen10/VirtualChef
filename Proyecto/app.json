@@ -21,10 +21,16 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/Logo.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "package": "com.franciscomelen10.Proyecto"
     },
     "web": {
       "favicon": "./assets/Logo.png"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "af6e59b4-df47-467f-b189-320277c15450"
+      }
     }
   }
 }
