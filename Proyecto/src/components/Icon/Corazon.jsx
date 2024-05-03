@@ -77,21 +77,24 @@ const Corazon = ({id_receta}) => {
 
 const styles = StyleSheet.create({
   contenedor: {
+    display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
+    alignContent: 'center',
   },
   shadow: {
+    textShadowColor: 'black',
     textShadowRadius: 3,
     width: 30,
-    height: 30,
+
     alignContent: 'center',
-    padding: 1,
+    textAlign: 'center',
+    paddingLeft: 2,
   },
   contenedorCorazon: {
-    justifyContent: 'center',
-    alignItems: 'center',
-    left: 10,
-    paddingLeft: 5,
+    left: 0,
+    paddingLeft: 0,
+    alignContent: 'center',
   },
 });
 

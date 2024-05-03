@@ -20,6 +20,7 @@ import BotonRetroceder from '../../components/Buttons/BtnRetroceder';
 import {UserContext} from '../../contexts/userContext';
 import {existeUsuario} from '../../hooks/Usuarios';
 import {Button} from 'react-native-paper';
+import Corazon from '../../components/Icon/Corazon';
 
 /**
  * Component for displaying a recipe.
@@ -175,7 +176,6 @@ function VistaReceta({navigation, route}) {
               </View>
 
               <Image style={styles.img} src={imagenContext.assets[0].uri} />
-              <View style={styles.favoriteIconWrappper}>{Iconos.Corazon}</View>
             </View>
             <View style={styles.panelDetails}>
               <View style={styles.recipeNameAndControlsWrapper}>
@@ -269,7 +269,20 @@ function VistaReceta({navigation, route}) {
               </View>
 
               <Image style={styles.img} src={urlImagen} />
-              <View style={styles.favoriteIconWrappper}>{Iconos.Corazon}</View>
+              <View style={styles.favoriteIconWrappper}>
+                <View
+                  style={{
+                    width: '100%',
+                    display: 'flex',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    alignContent: 'center',
+                    flexDirection: 'row',
+                  }}
+                >
+                  <Corazon id_receta={id}></Corazon>
+                </View>
+              </View>
             </View>
             <View style={styles.panelDetails}>
               <View style={styles.recipeNameAndControlsWrapper}>
@@ -399,11 +412,13 @@ const styles = StyleSheet.create({
     zIndex: 10,
     right: 0,
     marginRight: 10,
-    padding: 5,
+    padding: 6,
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   goBackIconWrappper: {
     alignSelf: 'flex-start',
-    position: 'absolute',
     position: 'absolute',
     zIndex: 10,
     left: 0,
