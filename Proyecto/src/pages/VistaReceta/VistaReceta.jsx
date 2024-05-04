@@ -57,7 +57,6 @@ function VistaReceta({navigation, route}) {
     const fetchUser = async () => {
       const respondUser = await existeUsuario('', '', user.id);
       setUserData(respondUser[0]);
-      setLoading(false);
     };
 
     fetchUser();
@@ -260,56 +259,66 @@ function VistaReceta({navigation, route}) {
         </ScrollView>
       );
     } else {
-      return (
-        <ScrollView>
-          <View style={styles.container}>
-            <View style={styles.panelImg}>
-              <View style={styles.goBackIconWrappper}>
-                <BotonRetroceder />
-              </View>
+      if (!loading) {
+        return (
+          <ScrollView>
+            <View style={styles.container}>
+              <View style={styles.panelImg}>
+                <View style={styles.goBackIconWrappper}>
+                  <BotonRetroceder />
+                </View>
 
-              <Image style={styles.img} src={urlImagen} />
-              <View style={styles.favoriteIconWrappper}>
-                <View
-                  style={{
-                    width: '100%',
-                    display: 'flex',
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                    alignContent: 'center',
-                    flexDirection: 'row',
-                  }}
-                >
-                  <Corazon id_receta={id}></Corazon>
+                <Image style={styles.img} src={urlImagen} />
+                <View style={styles.favoriteIconWrappper}>
+                  <View
+                    style={{
+                      width: '100%',
+                      display: 'flex',
+                      justifyContent: 'center',
+                      alignItems: 'center',
+                      alignContent: 'center',
+                      flexDirection: 'row',
+                    }}
+                  >
+                    <Corazon id_receta={id}></Corazon>
+                  </View>
+                </View>
+              </View>
+              <View style={styles.panelDetails}>
+                <View style={styles.recipeNameAndControlsWrapper}>
+                  <Text style={styles.recipeName}>{nombre}</Text>
+                </View>
+                <View>
+                  <Text style={styles.recipeDescrption}>{descripcion}</Text>
+                </View>
+                <View>
+                  <Text style={styles.detailsHeader}>Ingredientes</Text>
+                  <View style={styles.list}>{renderIngredientes()}</View>
+                </View>
+                <View>
+                  <Text style={styles.detailsHeader}>Preparacion</Text>
+                  <View style={styles.list}>{renderPasos()}</View>
+                </View>
+                <View>
+                  <Text style={{textAlign: 'center', padding: 10}}>
+                    <Text style={{fontWeight: 600}}>
+                      {loading ? <Text>Cargando</Text> : creador}
+                    </Text>
+                  </Text>
                 </View>
               </View>
             </View>
-            <View style={styles.panelDetails}>
-              <View style={styles.recipeNameAndControlsWrapper}>
-                <Text style={styles.recipeName}>{nombre}</Text>
-              </View>
-              <View>
-                <Text style={styles.recipeDescrption}>{descripcion}</Text>
-              </View>
-              <View>
-                <Text style={styles.detailsHeader}>Ingredientes</Text>
-                <View style={styles.list}>{renderIngredientes()}</View>
-              </View>
-              <View>
-                <Text style={styles.detailsHeader}>Preparacion</Text>
-                <View style={styles.list}>{renderPasos()}</View>
-              </View>
-              <View>
-                <Text style={{textAlign: 'center', padding: 10}}>
-                  <Text style={{fontWeight: 600}}>
-                    {loading ? <Text>Cargando</Text> : creador}
-                  </Text>
-                </Text>
-              </View>
-            </View>
+          </ScrollView>
+        );
+      } else {
+        return (
+          <View
+            style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}
+          >
+            <ActivityIndicator size="large" color="#246C2C" />
           </View>
-        </ScrollView>
-      );
+        );
+      }
     }
   };
 
